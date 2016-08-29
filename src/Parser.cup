@@ -23,9 +23,24 @@ parser code  {:
 
 /* Terminals (tokens returned by the scanner). */
 
-terminal Integer INTEGER_LITERAL;
-terminal Float FLOAT_LITERAL;
-terminal Boolean BOOLEAN_LITERAL;
+/* keywords terminal */
+
+terminal BOOL, BREAK, CLASS, CONTINUE, ELSE, FALSE, FLOAT, FOR, IF, INTEGER, RETURN, TRUE, VOID, WHILE, EXTERN;
+
+/* operations terminal */
+
+terminal MINUS, PLUS, PRODUCT, DIVIDE, MOD;
+terminal LESS, HIGH, LESS_EQ, HIGH_EQ;
+terminal EQUAL, DISTINCT;
+terminal AND, OR;
+terminal ASSIGN, INC, DEC;
+
+/* literals */
+terminal INTEGER_LITERAL;
+terminal FLOAT_LITERAL;
+terminal BOOLEAN_LITERAL;
+
+
 
 
 /* Non-terminals */
@@ -34,13 +49,16 @@ non terminal expr;
 
 /* The grammar */
 
-//Ejemplo que permite analizar un texto de float, boolean e integer solamente, con espacios y comentarios además.
+//example
 expr ::= FLOAT_LITERAL:f {: System.out.print(" " + f); :}
+		| KEYWORDS:keywords {: System.out.print(" " + keywords); :}
 		| INTEGER_LITERAL:i {: System.out.print(" " + i); :}
 		| BOOLEAN_LITERAL:b {: System.out.print(" " + b); :}
 		| FLOAT_LITERAL:f expr {: System.out.print(" " + f); :}
         | INTEGER_LITERAL:i expr {: System.out.print(" " + i); :}
 		| BOOLEAN_LITERAL:b expr {: System.out.print(" " + b); :}
+		| KEYWORDS:keywords expr {: System.out.print(" " + keywords); :}
+		
         ;
 
 

@@ -18,7 +18,7 @@ public class ParserTest {
 			parser p = new parser(s);
 	        p.parse();
 	        
-	        System.out.println("No errors.");
+	        System.out.println(" No errors.");
 	      }
 	      catch (Exception e) {
 	        e.printStackTrace(System.out);
