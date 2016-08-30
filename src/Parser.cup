@@ -26,6 +26,7 @@ parser code  {:
 /* keywords terminal */
 
 terminal BOOL, BREAK, CLASS, CONTINUE, ELSE, FALSE, FLOAT, FOR, IF, INTEGER, RETURN, TRUE, VOID, WHILE, EXTERN;
+terminal ID, POINT, COMA, LPAR, RPAR, LKEY, RKEY, LBRACKET, RBRACKET, EXCLAMATION_MARK, SEMICOLON;
 
 /* operations terminal */
 
@@ -38,34 +39,153 @@ terminal ASSIGN, INC, DEC;
 /* literals */
 terminal INTEGER_LITERAL;
 terminal FLOAT_LITERAL;
-terminal BOOLEAN_LITERAL;
-
-
-
 
 /* Non-terminals */
-non terminal expr;
+non terminal program, class_decl;
+non terminal field_decl, field_decls, identifier, identifiers;
+non terminal method_decl, method_decls, arguments_decl;
+non terminal type, body, block;
+non terminal statement, statements;
+non terminal method_call, expr, exprs, location;
+non terminal   id,   bin_op, assing_op, arith_op, rel_op, eq_op, cond_op, literal, boolean_literal;
+
+/* Precedences (in order from lowest to highest priority) */
+
+precedence right CLASS;
+precedence left COMA, SEMICOLON, LKEY, RKEY;
+precedence right ASSIGN, INC, DEC;
+precedence left OR;
+precedence left AND;
+precedence left EQUAL, DISTINCT;
+precedence left LESS, HIGH, LESS_EQ, HIGH_EQ;
+precedence left MINUS, PLUS;
+precedence left PRODUCT, DIVIDE, MOD;
+precedence left EXCLAMATION_MARK;
+precedence left LPAR, RPAR;
+precedence left LBRACKET, RBRACKET;
+precedence left POINT;
+precedence left ID;
+precedence left ELSE;
 
 
 /* The grammar */
-
-//example
-expr ::= FLOAT_LITERAL:f {: System.out.print(" " + f); :}
-		| KEYWORDS:keywords {: System.out.print(" " + keywords); :}
-		| INTEGER_LITERAL:i {: System.out.print(" " + i); :}
-		| BOOLEAN_LITERAL:b {: System.out.print(" " + b); :}
-		| FLOAT_LITERAL:f expr {: System.out.print(" " + f); :}
-        | INTEGER_LITERAL:i expr {: System.out.print(" " + i); :}
-		| BOOLEAN_LITERAL:b expr {: System.out.print(" " + b); :}
-		| KEYWORDS:keywords expr {: System.out.print(" " + keywords); :}
+			
+start with program;			
 		
-        ;
+program ::= class_decl
+		| class_decl program
+		;
 
+class_decl ::= CLASS ID LKEY  RKEY
+		| CLASS ID LKEY field_decls RKEY
+		| CLASS ID LKEY method_decls RKEY
+		| CLASS ID LKEY field_decls method_decls RKEY
+		;
 
+field_decls ::= field_decl //Just one field declaration
+		| field_decls field_decl //At least two fields are declarated
+		;
 
+field_decl ::= type identifiers SEMICOLON
+		;
 
+identifiers ::= identifier //Only one identifier
+		| identifiers COMA identifier //At least two identifiers
+		;
 
+identifier ::= ID //New identifier
+		| ID LBRACKET INTEGER_LITERAL RBRACKET
+		;
 
+method_decls ::= method_decl
+		| method_decls method_decl
+		;		
 
+method_decl ::= type ID LPAR RPAR body
+		| type ID LPAR arguments_decl RPAR body
+		;
+		
+arguments_decl ::= type ID
+		| arguments_decl COMA type ID
+		;
 
+statements ::= statement
+		| statements statement
+		;
 
+body ::= block
+		| EXTERN SEMICOLON
+		;
+		
+block ::= LKEY RKEY
+		| LKEY field_decls RKEY
+		| LKEY statements RKEY
+		| LKEY field_decls statements RKEY
+		;
+
+        
+type ::= INTEGER | FLOAT | BOOL | ID | VOID
+		;
+
+statement ::= location assing_op expr SEMICOLON
+		| method_call SEMICOLON
+		| IF LPAR expr RPAR statement 
+		| IF LPAR expr RPAR statement ELSE statement
+		| FOR ID ASSIGN expr COMA expr statement
+		| WHILE expr statement
+		| RETURN SEMICOLON
+		| RETURN expr SEMICOLON
+		| BREAK SEMICOLON
+		| CONTINUE SEMICOLON
+		| SEMICOLON
+		| block
+		;
+		
+bin_op ::= arith_op | rel_op | eq_op | cond_op
+		;
+		
+method_call ::= id LPAR RPAR 
+		| id LPAR exprs RPAR
+		;
+
+exprs ::= expr 
+		| exprs COMA expr
+		;
+
+location ::= id 
+		| id LBRACKET expr RBRACKET
+		;
+
+id ::= ID 
+		| ID POINT id
+		;
+		
+expr ::= location
+		| method_call
+		| literal
+		| expr bin_op expr  
+		| MINUS expr
+		| EXCLAMATION_MARK expr
+		| LPAR expr RPAR
+		;	      
+
+assing_op ::= ASSIGN | INC | DEC
+		;
+		
+arith_op ::= MINUS | PLUS | PRODUCT | DIVIDE | MOD
+		;
+
+rel_op ::= LESS | HIGH | LESS_EQ | HIGH_EQ
+		;
+
+eq_op ::= EQUAL | DISTINCT
+		;
+
+cond_op ::= AND | OR
+		;
+
+literal ::= FLOAT_LITERAL | boolean_literal | INTEGER_LITERAL
+		;
+
+boolean_literal ::= TRUE | FALSE
+		;

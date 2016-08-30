@@ -34,11 +34,9 @@ import java_cup.runtime.*;
     alpha = [a-z] | [A-Z]
     digit = [0-9]
     int_literal = {digit}+
-    bool_literal = true | false
-    float_literal = {digit}+ "."{digit}+
-    type = integer | float | bool | id | void
-    
-    
+    float_literal = {digit}+ . {digit}+
+    id = {alpha} | {alpha} {alpha_num}+
+    alpha_num = {alpha} | {digit} | _
     
    
     
@@ -48,21 +46,21 @@ import java_cup.runtime.*;
 
 <YYINITIAL> {
 	
-	"bool"							{return symbol(sym.BOOL, new String(yytext()));}
-    "break"							{return symbol(sym.BREAK, new String(yytext()));}
-    "class"							{return symbol(sym.CLASS, new String(yytext()));}
-    "continue"						{return symbol(sym.CONTINUE, new String(yytext()));}
-    "else"							{return symbol(sym.ELSE, new String(yytext()));}
-    "false"							{return symbol(sym.FALSE, new String(yytext()));}
-    "float"							{return symbol(sym.FLOAT, new String(yytext()));}
-    "for"							{return symbol(sym.FOR, new String(yytext()));}
-    "if"							{return symbol(sym.IF, new String(yytext()));}
-    "integer"						{return symbol(sym.INTEGER, new String(yytext()));}
-    "return"						{return symbol(sym.RETURN, new String(yytext()));}
-    "true"							{return symbol(sym.TRUE, new String(yytext()));} 
-    "void"							{return symbol(sym.VOID, new String(yytext()));}
-    "while"							{return symbol(sym.WHILE, new String(yytext()));}
-    "extern"						{return symbol(sym.EXTERN, new String(yytext()));}
+	"bool"							{ return symbol(sym.BOOL, yytext());}
+    "break"							{ return symbol(sym.BREAK, yytext());}
+    "class"							{ return symbol(sym.CLASS, yytext());}
+    "continue"						{ return symbol(sym.CONTINUE, yytext());}
+    "else"							{ return symbol(sym.ELSE, yytext());}
+    "false"							{ return symbol(sym.FALSE, yytext());}
+    "float"							{ return symbol(sym.FLOAT, yytext());}
+    "for"							{ return symbol(sym.FOR, yytext());}
+    "if"							{ return symbol(sym.IF, yytext());}
+    "integer"						{ return symbol(sym.INTEGER, yytext());}
+    "return"						{ return symbol(sym.RETURN, yytext());}
+    "true"							{ return symbol(sym.TRUE, yytext());} 
+    "void"							{ return symbol(sym.VOID, yytext());}
+    "while"							{ return symbol(sym.WHILE, yytext());}
+    "extern"						{ return symbol(sym.EXTERN, yytext());}
 }
 
 /* operations */
@@ -70,38 +68,38 @@ import java_cup.runtime.*;
 <YYINITIAL> {    
     /* arithmetical operations */
     
-	"-"								{return symbol(sym.MINUS, new String(yytext()));}
-	"+"								{return symbol(sym.PLUS, new String(yytext()));}
-    "*"								{return symbol(sym.PRODUCT, new String(yytext()));}
-    "/"								{return symbol(sym.DIVIDE, new String(yytext()));}
-    "%"								{return symbol(sym.MOD, new String(yytext()));}
+	"-"								{ return symbol(sym.MINUS, yytext());}
+	"+"								{ return symbol(sym.PLUS, yytext());}
+    "*"								{ return symbol(sym.PRODUCT, yytext());}
+    "/"								{ return symbol(sym.DIVIDE, yytext());}
+    "%"								{ return symbol(sym.MOD, yytext());}
 }   
 
 <YYINITIAL> {
     /* relation operations */
-    "<"								{return symbol(sym.LESS, new String(yytext()));}
-    ">"								{return symbol(sym.HIGH, new String(yytext()));}
-    "<="							{return symbol(sym.LESS_EQ, new String(yytext()));}
-    ">="							{return symbol(sym.HIGH_EQ, new String(yytext()));}
+    "<"								{ return symbol(sym.LESS, yytext());}
+    ">"								{ return symbol(sym.HIGH, yytext());}
+    "<="							{ return symbol(sym.LESS_EQ, yytext());}
+    ">="							{ return symbol(sym.HIGH_EQ, yytext());}
 }
 
 <YYINITIAL> {    
     /* equal operations */
-    "=="							{return symbol(sym.EQUAL, new String(yytext()));}
-    "!="							{return symbol(sym.DISTINCT, new String(yytext()));}
+    "=="							{ return symbol(sym.EQUAL, yytext());}
+    "!="							{ return symbol(sym.DISTINCT, yytext());}
 }
 
 <YYINITIAL> {    
     /* conditional operations */ 
-    "&&"							{return symbol(sym.AND, new String(yytext()));}
-	"||"							{return symbol(sym.OR, new String(yytext()));} 
+    "&&"							{ return symbol(sym.AND, yytext());}
+	"||"							{ return symbol(sym.OR, yytext());} 
 }
 
 <YYINITIAL> {    
-    /* conditional operations */
-    "="								{return symbol(sym.ASSIGN, new String(yytext()));}
-	"=+"							{return symbol(sym.INC, new String(yytext()));}
-	"=-"							{return symbol(sym.DEC, new String(yytext()));}  
+    /* assing operations */
+    "="								{ return symbol(sym.ASSIGN, yytext());}
+	"=+"							{ return symbol(sym.INC, yytext());}
+	"=-"							{ return symbol(sym.DEC, yytext());}  
 }	  
 
 /* types */
@@ -110,9 +108,23 @@ import java_cup.runtime.*;
 /* literals */
 <YYINITIAL> { 	
 	
-	{int_literal}					{return symbol(sym.INTEGER_LITERAL, new Integer(yytext()));}
-	{float_literal}					{return symbol(sym.FLOAT_LITERAL, new Float(yytext()));}
-	{bool_literal}					{return symbol(sym.BOOLEAN_LITERAL, new Boolean(yytext()));}
+	{int_literal}					{ return symbol(sym.INTEGER_LITERAL, yytext());}
+	{float_literal}					{ return symbol(sym.FLOAT_LITERAL, yytext());}
+}
+
+<YYINITIAL> { 	
+
+	{id} { return symbol(sym.ID, yytext());}
+	"." { return symbol(sym.POINT, yytext());}
+	"," { return symbol(sym.COMA, yytext());}
+	";" { return symbol(sym.SEMICOLON, yytext());}
+	"!" { return symbol(sym.EXCLAMATION_MARK, yytext());}
+	"(" { return symbol(sym.LPAR, yytext());}
+	")" { return symbol(sym.RPAR, yytext());}
+	"[" { return symbol(sym.LBRACKET, yytext());}
+	"]" { return symbol(sym.RBRACKET, yytext());}
+	"{" { return symbol(sym.LKEY, yytext());}
+	"}" { return symbol(sym.RKEY, yytext());}
 }
 
 	/* comments */

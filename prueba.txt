@@ -1,9 +1,16 @@
-123.03 343.998
-2342 false
-123.22 false
-true 2119684
-false 2.231232
-44444 33.2
-1.23 true
-false 432
-true 213.2
+class main {
+integer inc(integer x) {
+return x + 1;
+}
+integer read_int() extern;
+void print(bool s) extern;
+void main() {
+integer y;
+y = read_int();
+y = inc(y);
+if (y == 1)
+print(y==1);
+else
+print(y!=1);
+}
+}
