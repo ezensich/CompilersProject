@@ -3,6 +3,9 @@
 import java_cup.runtime.*;
 
 parser code  {: 
+
+	/* override error routines */
+
   public void report_error(String message, Object info) {
     StringBuilder m = new StringBuilder("Error ");
 
@@ -17,7 +20,8 @@ parser code  {:
   public void report_fatal_error(String message, Object info) {
     report_error(message, info);
     throw new RuntimeException("Fatal Syntax Error");
-  }
+  } 
+  
 :};
 
 
