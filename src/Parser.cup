@@ -141,9 +141,6 @@ statement ::= location assing_op expr SEMICOLON
 		| block
 		;
 		
-bin_op ::= arith_op | rel_op | eq_op | cond_op
-		;
-		
 method_call ::= id LPAR RPAR 
 		| id LPAR exprs RPAR
 		;
@@ -163,6 +160,19 @@ id ::= ID
 expr ::= location
 		| method_call
 		| literal
+		| expr PLUS expr
+		| expr MINUS expr
+		| expr PRODUCT exr
+		| expr DIVIDE expr
+		| expr MOD expr
+		| expr LESS expr
+		| expr HIGH expr
+		| expr LESS_EQ expr
+		| expr HIGH_EQ expr
+		| expr EQUAL expr
+		| expr DISTINCT expr
+		| expr AND expr
+		| expr OR expr
 		| expr bin_op expr  
 		| MINUS expr %prec UMINUS 
 		| EXCLAMATION_MARK expr
@@ -170,18 +180,6 @@ expr ::= location
 		;	      
 
 assing_op ::= ASSIGN | INC | DEC
-		;
-		
-arith_op ::= MINUS | PLUS | PRODUCT | DIVIDE | MOD
-		;
-
-rel_op ::= LESS | HIGH | LESS_EQ | HIGH_EQ
-		;
-
-eq_op ::= EQUAL | DISTINCT
-		;
-
-cond_op ::= AND | OR
 		;
 
 literal ::= FLOAT_LITERAL | boolean_literal | INTEGER_LITERAL
