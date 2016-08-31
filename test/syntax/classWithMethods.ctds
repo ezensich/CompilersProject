@@ -1,0 +1,5 @@
+class main {
+	integer suma (integer x, integer y){
+		return x + y ;
+	}
+}
