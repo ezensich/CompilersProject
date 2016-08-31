@@ -1,0 +1,6 @@
+En el desarrollo del lexer no hubo dificultades ni errores practicamente, con la documentacion y varios ejemplos fue comprensible para poder desarrollarlo.
+
+En el desarrollo del parser surgieron problemas como:
+	Errores reduce/reduce por haber definido mal la gramatica, se corrigieron reescribiendo partes( o producciones) de la misma.
+	Errores shift/reduce por errores de precedencia de operaciones y y palabras reservadas, se corrigieron insertando las precedencias
+		en orden significativo en el archivo .cup. Con la documentacion y ejemplos el resto del desarrollo fue relativamente fácil.

@@ -8,13 +8,16 @@ parser code  {:
 
   public void report_error(String message, Object info) {
     StringBuilder m = new StringBuilder("Error ");
-
-    if (info instanceof java_cup.runtime.Symbol) 
-      m.append( "("+info.toString()+")" );
-     
-    m.append(" : "+message);
-   
-    System.out.println(m);
+    if (info instanceof java_cup.runtime.Symbol) {
+     int column = ((java_cup.runtime.Symbol) info).right; //num of column
+     int line = ((java_cup.runtime.Symbol) info).left;//num of line
+     Object value = ((java_cup.runtime.Symbol) info).value;//value
+     m.append("in ");
+     m.append( "Line: "+(line + 1)+" " );
+     m.append( "Column: "+(column + 1)+" " );
+     m.append( "Value: "+value.toString()+" " );
+     System.out.println(m);
+    }
   }
    
   public void report_fatal_error(String message, Object info) {
@@ -34,7 +37,7 @@ terminal ID, POINT, COMA, LPAR, RPAR, LKEY, RKEY, LBRACKET, RBRACKET, EXCLAMATIO
 
 /* operations terminal */
 
-terminal MINUS, PLUS, PRODUCT, DIVIDE, MOD;
+terminal MINUS, UMINUS, PLUS, PRODUCT, DIVIDE, MOD;
 terminal LESS, HIGH, LESS_EQ, HIGH_EQ;
 terminal EQUAL, DISTINCT;
 terminal AND, OR;
@@ -55,20 +58,13 @@ non terminal   id,   bin_op, assing_op, arith_op, rel_op, eq_op, cond_op, litera
 
 /* Precedences (in order from lowest to highest priority) */
 
-precedence right CLASS;
-precedence left COMA, SEMICOLON, LKEY, RKEY;
-precedence right ASSIGN, INC, DEC;
 precedence left OR;
 precedence left AND;
-precedence left EQUAL, DISTINCT;
-precedence left LESS, HIGH, LESS_EQ, HIGH_EQ;
+precedence nonassoc EQUAL, DISTINCT;
+precedence nonassoc LESS, HIGH, LESS_EQ, HIGH_EQ; 
 precedence left MINUS, PLUS;
+precedence left UMINUS;
 precedence left PRODUCT, DIVIDE, MOD;
-precedence left EXCLAMATION_MARK;
-precedence left LPAR, RPAR;
-precedence left LBRACKET, RBRACKET;
-precedence left POINT;
-precedence left ID;
 precedence left ELSE;
 
 
@@ -161,14 +157,14 @@ location ::= id
 		;
 
 id ::= ID 
-		| ID POINT id
+		| ID POINT id 
 		;
 		
 expr ::= location
 		| method_call
 		| literal
 		| expr bin_op expr  
-		| MINUS expr
+		| MINUS expr %prec UMINUS 
 		| EXCLAMATION_MARK expr
 		| LPAR expr RPAR
 		;	      
