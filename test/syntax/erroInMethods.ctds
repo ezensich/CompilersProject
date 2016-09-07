@@ -1,0 +1,3 @@
+class main {
+	void (bool s) extern;
+}
