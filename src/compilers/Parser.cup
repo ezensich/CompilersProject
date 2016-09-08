@@ -1,6 +1,7 @@
 // CUP specification for a simple expression evaluator (w/ actions)
 package compilers;
 
+import ast.*;
 import java_cup.runtime.*;
 
 parser code  {: 
@@ -27,6 +28,12 @@ parser code  {:
   } 
   
 :};
+
+action code {:
+
+	Program program;
+
+:}
 
 
 /* Terminals (tokens returned by the scanner). */
@@ -55,7 +62,7 @@ non terminal method_decl, method_decls, arguments_decl;
 non terminal type, body, block;
 non terminal statement, statements;
 non terminal method_call, expr, exprs, location;
-non terminal   id,   bin_op, assing_op, arith_op, rel_op, eq_op, cond_op, literal, boolean_literal;
+non terminal   id,   bin_op, assing_op, literal, boolean_literal;
 
 /* Precedences (in order from lowest to highest priority) */
 
@@ -163,7 +170,7 @@ expr ::= location
 		| literal
 		| expr PLUS expr
 		| expr MINUS expr
-		| expr PRODUCT exr
+		| expr PRODUCT expr
 		| expr DIVIDE expr
 		| expr MOD expr
 		| expr LESS expr
