@@ -7,7 +7,7 @@ public interface ProgramVisitor<T> {
 	//visit statements
 		T visit(AssignStmt stmt);
 		T visit(IfStmt stmt);
-	
+		T visit(WhileStmt stmt);
 		
 		
 	//  T visit(ReturnStmt stmt);

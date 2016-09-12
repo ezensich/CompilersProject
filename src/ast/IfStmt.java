@@ -2,7 +2,7 @@ package ast;
 
 import compilers.*;
 
-public class IfStmt {
+public class IfStmt extends Statement{
 	private Expression condition;
 	private Block ifBlock;
 	private Block elseBlock;
@@ -58,5 +58,4 @@ public class IfStmt {
 		return v.visit(this);
 	}
 }
-
 
