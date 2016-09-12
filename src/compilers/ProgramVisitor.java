@@ -9,9 +9,7 @@ public interface ProgramVisitor<T> {
 		T visit(IfStmt stmt);
 		T visit(WhileStmt stmt);
 		T visit(ForStmt stmt);
-		
-		
-	//  T visit(ReturnStmt stmt);
+		T visit(ReturnStmt stmt);
 		
 		
 	/* visit expressions
