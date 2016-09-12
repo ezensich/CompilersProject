@@ -1,13 +1,14 @@
 package ast;
 
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+import javafx.util.Pair;
+
 
 public abstract class FieldDeclaration extends DeclarationClass {
 
 	
-	private List<Map<Type,Identifier>> listTypeAndId;
+	private Pair<Type, Identifier> listTypeAndId;
 	
 	public FieldDeclaration(){
 		
