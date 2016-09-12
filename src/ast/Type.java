@@ -1,15 +1,14 @@
 package ast;
 
 public enum Type {
-	INT,
+	INTEGER,
 	FLOAT,
 	VOID,
 	BOOL;
 	
-	@Override
 	public String toString() {
 		switch(this) {
-			case INT:
+			case INTEGER:
 				return "int";
 			case VOID:
 				return "void";
