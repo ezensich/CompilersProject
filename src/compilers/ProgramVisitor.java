@@ -1,10 +1,12 @@
 package compilers;
 
+import ast.*;
+
 public interface ProgramVisitor<T> {
-/*
+
 	//visit statements
-		T visit(AssignStmt stmt);
-		T visit(ReturnStmt stmt);
+		T visit(AssignStm stmt);
+	/*		T visit(ReturnStmt stmt);
 		T visit(IfStmt stmt);
 		
 	// visit expressions

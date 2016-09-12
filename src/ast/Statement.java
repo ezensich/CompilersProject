@@ -1,5 +1,6 @@
 package ast;
 
-public class Statement {
+
+public abstract class Statement extends Program {
 
 }
