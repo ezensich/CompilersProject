@@ -2,7 +2,7 @@ package ast;
 
 import compilers.ProgramVisitor;
 
-public class AssignStm extends Statement{
+public class AssignStmt extends Statement{
 	
 	private Expression expr;
 	private Location location;

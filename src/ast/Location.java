@@ -1,5 +1,5 @@
 package ast;
 
-public abstract class Location {
+public abstract class Location extends Expression{
 
 }
