@@ -1,6 +1,6 @@
 package ast;
 
-import compilers.ProgramVisitor;
+import compilers.ASTVisitor;
 
 public class BoolLiteral extends Literal {
 	private String stringValue;
@@ -38,8 +38,4 @@ public class BoolLiteral extends Literal {
 		return stringValue;
 	}
 
-	@Override
-	public <T> T accept(ProgramVisitor<T> v) {
-		return v.visit(this);
-	}
 }

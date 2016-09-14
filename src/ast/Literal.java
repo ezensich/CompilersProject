@@ -1,7 +1,7 @@
 package ast;
 
 
-public abstract class Literal extends Expression{
+public abstract class Literal{
 
 	
 	public abstract Type getType();
