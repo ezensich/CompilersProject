@@ -4,19 +4,19 @@ import compilers.*;
 
 public class IfStmt extends Statement{
 	private Expression condition;
-	private Block ifBlock;
-	private Block elseBlock;
+	private Statement ifStatement;
+	private Statement elseStatement;
 	
-	public IfStmt(Expression cond, Block ifBl) {
+	public IfStmt(Expression cond, Statement ifStmt) {
 		this.condition = cond;
-		this.ifBlock = ifBl;
-		this.elseBlock = null;
+		this.ifStatement = ifStmt;
+		this.elseStatement = null;
 	}
 	
-	public IfStmt(Expression cond, Block ifBl, Block elseBl) {
+	public IfStmt(Expression cond, Statement ifBl, Statement elseStmt) {
 		this.condition = cond;
-		this.ifBlock = ifBl;
-		this.elseBlock = elseBl;
+		this.ifStatement = ifBl;
+		this.elseStatement = elseStmt;
 	}
 
 	public Expression getCondition() {
@@ -27,28 +27,28 @@ public class IfStmt extends Statement{
 		this.condition = condition;
 	}
 
-	public Block getIfBlock() {
-		return ifBlock;
+	public Statement getIfStatement() {
+		return ifStatement;
 	}
 
-	public void setIfBlock(Block ifBlock) {
-		this.ifBlock = ifBlock;
+	public void setIfStatement(Statement ifStatement) {
+		this.ifStatement = ifStatement;
 	}
 
-	public Block getElseBlock() {
-		return elseBlock;
+	public Statement getElseStatement() {
+		return elseStatement;
 	}
 
-	public void setElseBlock(Block elseBlock) {
-		this.elseBlock = elseBlock;
+	public void setElseStatement(Statement elseStatement) {
+		this.elseStatement = elseStatement;
 	}
 	
 	
 	public String toString() {
-		String rtn = "if " + condition + '\n' + ifBlock.toString();
+		String rtn = "if " + condition + '\n' + ifStatement.toString();
 		
-		if (elseBlock != null) {
-			rtn += "else \n" + elseBlock;
+		if (elseStatement != null) {
+			rtn += "else \n" + elseStatement;
 		}
 		
 		return rtn;

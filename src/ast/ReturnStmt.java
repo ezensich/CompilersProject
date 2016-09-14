@@ -2,7 +2,7 @@ package ast;
 
 import compilers.ASTVisitor;
 
-public class ReturnStmt {
+public class ReturnStmt extends Statement {
 	private Expression expression;
 	
 	public ReturnStmt(Expression e) {

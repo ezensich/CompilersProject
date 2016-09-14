@@ -4,11 +4,11 @@ import compilers.ASTVisitor;
 
 public class WhileStmt extends Statement{
 	private Expression condition;
-	private Block whileBlock;
+	private Statement whileStatement;
 
-	public WhileStmt(Expression e, Block whileB){
+	public WhileStmt(Expression e, Statement whileStmt){
 		this.condition = e;
-		this.whileBlock = whileB;
+		this.whileStatement = whileStmt;
 	}
 	
 	//methods set and gets
@@ -17,8 +17,8 @@ public class WhileStmt extends Statement{
 		this.condition = cond;
 	}
 	
-	public void setWhileBlock (Block b){
-		this.whileBlock = b;
+	public void setWhileStatement (Statement whileStmt){
+		this.whileStatement = whileStmt;
 	}
 	
 	//gets
@@ -26,12 +26,12 @@ public class WhileStmt extends Statement{
 		return this.condition;
 	}
 	
-	public Block getBlockCondition(){
-		return this.whileBlock;
+	public Statement getStatementCondition(){
+		return this.whileStatement;
 	}
 	
 	public String toString(){
-		return "while" + condition + '\n' + whileBlock.toString();
+		return "while" + condition + '\n' + whileStatement.toString();
 		
 	}
 	public <T> T accept(ASTVisitor<T> v) {
