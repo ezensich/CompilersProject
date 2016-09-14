@@ -2,7 +2,8 @@ package ast;
 
 
 import java.util.List;
-import javafx.util.Pair;
+
+import data_structures.Pair;
 
 
 public abstract class FieldDeclaration extends DeclarationClass {
