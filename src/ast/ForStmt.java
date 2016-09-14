@@ -7,13 +7,13 @@ public class ForStmt extends Statement {
 	private Identifier id;
 	private Expression init;
 	private Expression cota;
-	private Block forBlock;
+	private Statement forStatement;
 
-	public ForStmt(Identifier id, Expression i, Expression c, Block forB){
+	public ForStmt(Identifier id, Expression i, Expression c, Statement forStmt){
 		this.id = id;
 		this.init = i;
 		this.cota = c;
-		this.forBlock = forB;
+		this.forStatement = forStmt;
 		
 	}
 	
@@ -31,8 +31,8 @@ public class ForStmt extends Statement {
 		this.cota = c;
 	}
 	
-	public void setForBlock (Block b){
-		this.forBlock = b;
+	public void setForStatement (Statement s){
+		this.forStatement = s;
 	}
 	
 	//gets
@@ -48,13 +48,13 @@ public class ForStmt extends Statement {
 		return this.cota;
 	}
 	
-	public Block getForBlock(){
-		return this.forBlock;
+	public Statement getForStatement(){
+		return this.forStatement;
 	}
 	
 	//method toString
 	public String toString(){
-		return id + "=" + init + "," + cota + '\n' + forBlock.toString();
+		return id + "=" + init + "," + cota + '\n' + forStatement.toString();
 	}
 	
 	public <T> T accept(ProgramVisitor<T> v) {
