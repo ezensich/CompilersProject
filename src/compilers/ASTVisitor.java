@@ -2,7 +2,7 @@ package compilers;
 
 import ast.*;
 
-public interface ProgramVisitor<T> {
+public interface ASTVisitor<T> {
 
 	//visit statements
 		T visit(AssignStmt stmt);

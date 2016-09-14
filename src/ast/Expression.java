@@ -1,5 +1,5 @@
 package ast;
 
-public abstract class Expression extends Program{
+public abstract class Expression extends AST{
 
 }

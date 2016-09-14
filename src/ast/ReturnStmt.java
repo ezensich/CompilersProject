@@ -1,6 +1,6 @@
 package ast;
 
-import compilers.ProgramVisitor;
+import compilers.ASTVisitor;
 
 public class ReturnStmt {
 	private Expression expression;
@@ -30,7 +30,7 @@ public class ReturnStmt {
 		}
 	}
 	
-	public <T> T accept(ProgramVisitor<T> v) {
+	public <T> T accept(ASTVisitor<T> v) {
 		return v.visit(this);
 	}
 }

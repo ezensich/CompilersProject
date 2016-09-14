@@ -1,6 +1,6 @@
 package ast;
 
-import compilers.ProgramVisitor;
+import compilers.ASTVisitor;
 
 public class ForStmt extends Statement {
 	
@@ -57,7 +57,7 @@ public class ForStmt extends Statement {
 		return id + "=" + init + "," + cota + '\n' + forBlock.toString();
 	}
 	
-	public <T> T accept(ProgramVisitor<T> v) {
+	public <T> T accept(ASTVisitor<T> v) {
 		return v.visit(this);
 	}
 

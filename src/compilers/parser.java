@@ -529,7 +529,7 @@ class CUP$parser$actions {
 
 
 
-	Program program;
+	AST program;
 
 
   private final parser parser;

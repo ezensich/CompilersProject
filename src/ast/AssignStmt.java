@@ -1,6 +1,6 @@
 package ast;
 
-import compilers.ProgramVisitor;
+import compilers.ASTVisitor;
 
 public class AssignStmt extends Statement{
 	
@@ -41,7 +41,7 @@ public class AssignStmt extends Statement{
 	}
 	
 	
-	public <T> T accept(ProgramVisitor<T> v) {
+	public <T> T accept(ASTVisitor<T> v) {
 		return v.visit(this);
 	}
 

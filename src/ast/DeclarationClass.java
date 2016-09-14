@@ -3,7 +3,7 @@ package ast;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class DeclarationClass extends Program {
+public abstract class DeclarationClass extends AST {
 
 	private List<FieldDeclaration> listFieldDec;
 	private List<MethodDeclaration> listMetDec;

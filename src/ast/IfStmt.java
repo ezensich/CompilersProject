@@ -54,7 +54,7 @@ public class IfStmt extends Statement{
 		return rtn;
 	}
 
-	public <T> T accept(ProgramVisitor<T> v) {
+	public <T> T accept(ASTVisitor<T> v) {
 		return v.visit(this);
 	}
 }

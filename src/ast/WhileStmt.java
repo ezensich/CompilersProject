@@ -1,6 +1,6 @@
 package ast;
 
-import compilers.ProgramVisitor;
+import compilers.ASTVisitor;
 
 public class WhileStmt extends Statement{
 	private Expression condition;
@@ -34,7 +34,7 @@ public class WhileStmt extends Statement{
 		return "while" + condition + '\n' + whileBlock.toString();
 		
 	}
-	public <T> T accept(ProgramVisitor<T> v) {
+	public <T> T accept(ASTVisitor<T> v) {
 		return v.visit(this);
 	}
 	
