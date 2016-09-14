@@ -11,12 +11,12 @@ public interface ProgramVisitor<T> {
 		T visit(ForStmt stmt);
 		T visit(ReturnStmt stmt);
 		
+		// visit literals
+		T visit(BoolLiteral lit);
+		
 		
 	/* visit expressions
-		T visit(BinOpExpr expr);;
-		
-	// visit literals	
-		T visit(IntLiteral lit);
+		T visit(BinOpExpr expr);
 
 	// visit locations	
 		T visit(VarLocation loc);

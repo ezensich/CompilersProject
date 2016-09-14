@@ -3,6 +3,7 @@ package compilers;
 
 import ast.*;
 import java_cup.runtime.*;
+import java.util.List;
 
 parser code  {: 
 
@@ -40,8 +41,11 @@ action code {:
 
 /* keywords terminal */
 
-terminal BOOL, BREAK, CLASS, CONTINUE, ELSE, FALSE, FLOAT, FOR, IF, INTEGER, RETURN, TRUE, VOID, WHILE, EXTERN;
+terminal BOOL, BREAK, CLASS, CONTINUE, ELSE, FOR, IF, RETURN, VOID, WHILE, EXTERN;
 terminal ID, POINT, COMA, LPAR, RPAR, LKEY, RKEY, LBRACKET, RBRACKET, EXCLAMATION_MARK, SEMICOLON;
+terminal FLOAT, INTEGER;
+terminal Boolean TRUE, FALSE;
+
 
 /* operations terminal */
 
@@ -52,11 +56,12 @@ terminal AND, OR;
 terminal ASSIGN, INC, DEC;
 
 /* literals */
-terminal INTEGER_LITERAL;
-terminal FLOAT_LITERAL;
+terminal Integer INTEGER_LITERAL;
+terminal Float FLOAT_LITERAL;
 
 /* Non-terminals */
-non terminal program, class_decl;
+non terminal List<DeclarationClass> program;
+non terminal class_decl;
 non terminal field_decl, field_decls, identifier, identifiers;
 non terminal method_decl, method_decls, arguments_decl;
 non terminal type, body, block;
@@ -190,8 +195,11 @@ expr ::= location
 assing_op ::= ASSIGN | INC | DEC
 		;
 
-literal ::= FLOAT_LITERAL | boolean_literal | INTEGER_LITERAL
+literal ::= FLOAT_LITERAL 
+		| boolean_literal:b
+		| INTEGER_LITERAL
 		;
 
-boolean_literal ::= TRUE | FALSE
+boolean_literal ::= TRUE:t
+		| FALSE:f
 		;
