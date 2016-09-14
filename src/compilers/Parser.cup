@@ -43,8 +43,9 @@ action code {:
 
 terminal BOOL, BREAK, CLASS, CONTINUE, ELSE, FOR, IF, RETURN, VOID, WHILE, EXTERN;
 terminal ID, POINT, COMA, LPAR, RPAR, LKEY, RKEY, LBRACKET, RBRACKET, EXCLAMATION_MARK, SEMICOLON;
-terminal FLOAT, INTEGER;
-terminal Boolean TRUE, FALSE;
+terminal String TRUE, FALSE;
+terminal Float FLOAT;
+terminal Integer INTEGER;
 
 
 /* operations terminal */
@@ -60,7 +61,7 @@ terminal Integer INTEGER_LITERAL;
 terminal Float FLOAT_LITERAL;
 
 /* Non-terminals */
-non terminal List<DeclarationClass> program;
+non terminal Program program;
 non terminal class_decl;
 non terminal field_decl, field_decls, identifier, identifiers;
 non terminal method_decl, method_decls, arguments_decl;
@@ -85,8 +86,8 @@ precedence left ELSE;
 			
 start with program;			
 		
-program ::= class_decl
-		| class_decl program
+program ::= class_decl:c {:  :}
+		| class_decl:c program:p {:  :}
 		;
 
 class_decl ::= CLASS ID LKEY  RKEY
@@ -142,7 +143,7 @@ type ::= INTEGER | FLOAT | BOOL | ID | VOID
 
 statement ::= location assing_op expr SEMICOLON
 		| method_call SEMICOLON
-		| IF LPAR expr RPAR statement 
+		| IF LPAR expr RPAR statement  {:  :}
 		| IF LPAR expr RPAR statement ELSE statement
 		| FOR ID ASSIGN expr COMA expr statement
 		| WHILE expr statement
@@ -195,11 +196,11 @@ expr ::= location
 assing_op ::= ASSIGN | INC | DEC
 		;
 
-literal ::= FLOAT_LITERAL 
-		| boolean_literal:b
-		| INTEGER_LITERAL
+literal ::= FLOAT_LITERAL:f {: RESULT = new FloatLiteral(f);  :}
+		| boolean_literal:b {: RESULT = b; :}
+		| INTEGER_LITERAL:i {: RESULT = new IntegerLiteral(i); :}
 		;
 
-boolean_literal ::= TRUE:t
-		| FALSE:f
+boolean_literal ::= TRUE:t {: RESULT = new BoolLiteral(t); :}
+		| FALSE:f {: RESULT = new BoolLiteral(f); :}
 		;

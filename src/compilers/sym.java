@@ -13,7 +13,7 @@ public class sym {
   public static final int LBRACKET = 20;
   public static final int UMINUS = 29;
   public static final int HIGH = 35;
-  public static final int INTEGER = 25;
+  public static final int INTEGER = 27;
   public static final int CONTINUE = 5;
   public static final int PRODUCT = 31;
   public static final int LESS = 34;
@@ -35,7 +35,7 @@ public class sym {
   public static final int RETURN = 9;
   public static final int EQUAL = 38;
   public static final int RBRACKET = 21;
-  public static final int TRUE = 26;
+  public static final int TRUE = 24;
   public static final int RKEY = 19;
   public static final int DISTINCT = 39;
   public static final int error = 1;
@@ -48,12 +48,12 @@ public class sym {
   public static final int POINT = 14;
   public static final int WHILE = 11;
   public static final int LESS_EQ = 36;
-  public static final int FLOAT = 24;
+  public static final int FLOAT = 26;
   public static final int LPAR = 16;
   public static final int DEC = 44;
   public static final int FLOAT_LITERAL = 46;
   public static final int EXCLAMATION_MARK = 22;
-  public static final int FALSE = 27;
+  public static final int FALSE = 25;
   public static final int INTEGER_LITERAL = 45;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -80,10 +80,10 @@ public class sym {
   "RBRACKET",
   "EXCLAMATION_MARK",
   "SEMICOLON",
-  "FLOAT",
-  "INTEGER",
   "TRUE",
   "FALSE",
+  "FLOAT",
+  "INTEGER",
   "MINUS",
   "UMINUS",
   "PLUS",

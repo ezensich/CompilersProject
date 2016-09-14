@@ -7,9 +7,9 @@ public class BoolLiteral extends Literal {
 	private Boolean booleanValue;
 	
 
-	public BoolLiteral(Boolean val){
-		stringValue = val.toString(); 
-		booleanValue = val;
+	public BoolLiteral(String val){
+		stringValue = val; 
+		booleanValue = Boolean.parseBoolean(val);
 	}
 
 	@Override
