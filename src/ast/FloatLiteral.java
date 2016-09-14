@@ -1,5 +1,7 @@
 package ast;
 
+import compilers.ASTVisitor;
+
 public class FloatLiteral extends Literal {
 
 	private String stringValue;
@@ -35,6 +37,12 @@ public class FloatLiteral extends Literal {
 	@Override
 	public String toString() {
 		return stringValue;
+	}
+
+	@Override
+	public <T> T accept(ASTVisitor<T> v) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

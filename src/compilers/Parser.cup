@@ -42,10 +42,8 @@ action code {:
 /* keywords terminal */
 
 terminal BOOL, BREAK, CLASS, CONTINUE, ELSE, FOR, IF, RETURN, VOID, WHILE, EXTERN;
-terminal ID, POINT, COMA, LPAR, RPAR, LKEY, RKEY, LBRACKET, RBRACKET, EXCLAMATION_MARK, SEMICOLON;
-terminal String TRUE, FALSE;
-terminal Float FLOAT;
-terminal Integer INTEGER;
+terminal POINT, COMA, LPAR, RPAR, LKEY, RKEY, LBRACKET, RBRACKET, EXCLAMATION_MARK, SEMICOLON;
+terminal String TRUE, FALSE, ID, FLOAT, INTEGER;
 
 
 /* operations terminal */
@@ -62,13 +60,21 @@ terminal Float FLOAT_LITERAL;
 
 /* Non-terminals */
 non terminal Program program;
-non terminal class_decl;
-non terminal field_decl, field_decls, identifier, identifiers;
+non terminal DeclarationClass class_decl;
+non terminal FieldDeclaration field_decl, field_decls;
+non terminal Identifier identifier, identifiers;
 non terminal method_decl, method_decls, arguments_decl;
-non terminal type, body, block;
+non terminal Type type;
+non terminal Block block;
+non terminal body;
 non terminal statement, statements;
-non terminal method_call, expr, exprs, location;
-non terminal   id,   bin_op, assing_op, literal, boolean_literal;
+non terminal Expression expr, exprs;
+non terminal Location location;
+non terminal method_call;
+non terminal IdName id;
+non terminal Literal literal;
+non terminal BoolLiteral boolean_literal;
+non terminal bin_op, assing_op;
 
 /* Precedences (in order from lowest to highest priority) */
 
@@ -86,8 +92,8 @@ precedence left ELSE;
 			
 start with program;			
 		
-program ::= class_decl:c {:  :}
-		| class_decl:c program:p {:  :}
+program ::= class_decl:c {: RESULT = new Program(c); :}
+		| class_decl:c program:p {: p.addDeclarationClass(c); RESULT = p; :}
 		;
 
 class_decl ::= CLASS ID LKEY  RKEY
@@ -123,10 +129,6 @@ arguments_decl ::= type ID
 		| arguments_decl COMA type ID
 		;
 
-statements ::= statement
-		| statements statement
-		;
-
 body ::= block
 		| EXTERN SEMICOLON
 		;
@@ -141,6 +143,10 @@ block ::= LKEY RKEY
 type ::= INTEGER | FLOAT | BOOL | ID | VOID
 		;
 
+statements ::= statement
+		| statements statement
+		;
+		
 statement ::= location assing_op expr SEMICOLON
 		| method_call SEMICOLON
 		| IF LPAR expr RPAR statement  {:  :}
@@ -163,17 +169,17 @@ exprs ::= expr
 		| exprs COMA expr
 		;
 
-location ::= id 
-		| id LBRACKET expr RBRACKET
+location ::= id:i {: RESULT = new Location(i); :}
+		| id:i LBRACKET expr:e RBRACKET {: RESULT = new Location(i,e); :}
 		;
 
-id ::= ID 
-		| ID POINT id 
+id ::= ID:i {: RESULT = new IdName(i); :}
+		| ID:i POINT id:ObjId {: ObjId.extendId(i); RESULT = ObjId; :} 
 		;
 		
-expr ::= location
+expr ::= location:loc {: RESULT = loc; :}
 		| method_call
-		| literal
+		| literal:lit {: RESULT = lit; :}
 		| expr PLUS expr
 		| expr MINUS expr
 		| expr PRODUCT expr
@@ -196,7 +202,7 @@ expr ::= location
 assing_op ::= ASSIGN | INC | DEC
 		;
 
-literal ::= FLOAT_LITERAL:f {: RESULT = new FloatLiteral(f);  :}
+literal ::= FLOAT_LITERAL:f {: RESULT = new FloatLiteral(f); :}
 		| boolean_literal:b {: RESULT = b; :}
 		| INTEGER_LITERAL:i {: RESULT = new IntegerLiteral(i); :}
 		;

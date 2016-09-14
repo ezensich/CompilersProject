@@ -9,8 +9,8 @@ package compilers;
 public class sym {
   /* terminals */
   public static final int DIVIDE = 32;
-  public static final int LKEY = 18;
-  public static final int LBRACKET = 20;
+  public static final int LKEY = 17;
+  public static final int LBRACKET = 19;
   public static final int UMINUS = 29;
   public static final int HIGH = 35;
   public static final int INTEGER = 27;
@@ -20,8 +20,8 @@ public class sym {
   public static final int FOR = 7;
   public static final int MINUS = 28;
   public static final int AND = 40;
-  public static final int SEMICOLON = 23;
-  public static final int RPAR = 17;
+  public static final int SEMICOLON = 22;
+  public static final int RPAR = 16;
   public static final int OR = 41;
   public static final int BOOL = 2;
   public static final int CLASS = 4;
@@ -30,30 +30,30 @@ public class sym {
   public static final int PLUS = 30;
   public static final int ASSIGN = 42;
   public static final int IF = 8;
-  public static final int ID = 13;
+  public static final int ID = 25;
   public static final int EOF = 0;
   public static final int RETURN = 9;
   public static final int EQUAL = 38;
-  public static final int RBRACKET = 21;
-  public static final int TRUE = 24;
-  public static final int RKEY = 19;
+  public static final int RBRACKET = 20;
+  public static final int TRUE = 23;
+  public static final int RKEY = 18;
   public static final int DISTINCT = 39;
   public static final int error = 1;
-  public static final int COMA = 15;
+  public static final int COMA = 14;
   public static final int MOD = 33;
   public static final int HIGH_EQ = 37;
   public static final int BREAK = 3;
   public static final int VOID = 10;
   public static final int ELSE = 6;
-  public static final int POINT = 14;
+  public static final int POINT = 13;
   public static final int WHILE = 11;
   public static final int LESS_EQ = 36;
   public static final int FLOAT = 26;
-  public static final int LPAR = 16;
+  public static final int LPAR = 15;
   public static final int DEC = 44;
   public static final int FLOAT_LITERAL = 46;
-  public static final int EXCLAMATION_MARK = 22;
-  public static final int FALSE = 25;
+  public static final int EXCLAMATION_MARK = 21;
+  public static final int FALSE = 24;
   public static final int INTEGER_LITERAL = 45;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -69,7 +69,6 @@ public class sym {
   "VOID",
   "WHILE",
   "EXTERN",
-  "ID",
   "POINT",
   "COMA",
   "LPAR",
@@ -82,6 +81,7 @@ public class sym {
   "SEMICOLON",
   "TRUE",
   "FALSE",
+  "ID",
   "FLOAT",
   "INTEGER",
   "MINUS",

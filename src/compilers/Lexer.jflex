@@ -19,11 +19,12 @@ import java_cup.runtime.*;
         return new Symbol(type, yyline, yycolumn, value);
       }
 %}
+
     LineTerminator = \r|\n|\r\n
     InputCharacter = [^\r\n]
     WhiteSpace     = {LineTerminator} | [ \t\f]
     
-    /* comments (REVISAR LAS EXPRESIONES DE ACUERDO AL ENUNCIADO)*/
+    /* comments */
     Comment = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
     TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
     // Comment can be the last line of the file, without line terminator.

@@ -38,4 +38,10 @@ public class BoolLiteral extends Literal {
 		return stringValue;
 	}
 
+	@Override
+	public <T> T accept(ASTVisitor<T> v) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
