@@ -70,8 +70,8 @@ non terminal Block block;
 non terminal body;
 non terminal Statement statement, statements;
 non terminal Expression expr, exprs;
-non terminal Location location;
-non terminal method_call;
+non terminal LocationExpr location;
+non terminal Expression method_call;
 non terminal IdName id;
 non terminal Literal literal;
 non terminal BoolLiteral boolean_literal;
@@ -198,7 +198,7 @@ expr ::= location:loc {: RESULT = loc; :}
 		| expr:e1 DISTINCT expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.DISTINCT,e2); :}
 		| expr:e1 AND expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.AND,e2); :}
 		| expr:e1 OR expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.OR,e2); :}
-		| MINUS expr:e1 %prec UMINUS {: RESULT = new UnaryOpExpr(e1,UnaryOpType.MINUS); :}
+		| MINUS expr:e1 {: RESULT = new UnaryOpExpr(e1,UnaryOpType.MINUS); :} %prec UMINUS 
 		| NOT expr:e1 {: RESULT = new UnaryOpExpr(e1,UnaryOpType.NOT); :}
 		| LPAR expr:e RPAR {: RESULT = e; :}
 		;	      
