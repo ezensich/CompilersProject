@@ -1,5 +1,6 @@
 package ast;
 
+import ast.enumerated_types.Type;
 import compilers.ASTVisitor;
 
 public class BoolLiteral extends Literal {

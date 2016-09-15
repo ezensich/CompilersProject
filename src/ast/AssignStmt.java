@@ -1,11 +1,12 @@
 package ast;
 
+import ast.enumerated_types.AssignOpType;
 import compilers.ASTVisitor;
 
 public class AssignStmt extends Statement{
 	
 	private Expression expr;
-	private Location location;
+	private LocationExpr location;
 	private AssignOpType operator;
 
 	// declared gets and sets
@@ -14,7 +15,7 @@ public class AssignStmt extends Statement{
 		this.expr = e;
 	}
 	
-	public void setLocation (Location l){
+	public void setLocation (LocationExpr l){
 		this.location = l;
 	}
 	
@@ -23,7 +24,7 @@ public class AssignStmt extends Statement{
 	}
 	
 	//gets 
-	public Location getLocation(){
+	public LocationExpr getLocation(){
 		return this.location;
 	}
 	

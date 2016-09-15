@@ -4,6 +4,7 @@ package ast;
 import java.util.LinkedList;
 import java.util.List;
 
+import ast.enumerated_types.Type;
 import data_structures.Pair;
 
 

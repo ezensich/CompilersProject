@@ -2,17 +2,17 @@ package ast;
 
 import compilers.ASTVisitor;
 
-public class Location extends Expression{
+public class LocationExpr extends Expression{
 
 	private IdName id;
 	private Expression expr;
 	
-	public Location(IdName i, Expression e){
+	public LocationExpr(IdName i, Expression e){
 		this.id = i;
 		this.expr = e;
 	}
 	
-	public Location(IdName i){
+	public LocationExpr(IdName i){
 		this.id = i;
 		this.expr = null;
 	}

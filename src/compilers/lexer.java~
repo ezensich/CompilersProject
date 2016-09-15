@@ -745,7 +745,7 @@ class lexer implements java_cup.runtime.Scanner {
             }
           case 58: break;
           case 13: 
-            { return symbol(sym.EXCLAMATION_MARK, yytext());
+            { return symbol(sym.NOT, yytext());
             }
           case 59: break;
           case 14: 

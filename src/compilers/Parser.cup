@@ -1,6 +1,7 @@
 // CUP specification for a simple expression evaluator (w/ actions)
 package compilers;
 
+import ast.enumerated_types.*;
 import ast.*;
 import java_cup.runtime.*;
 import java.util.List;
@@ -42,7 +43,7 @@ action code {:
 /* keywords terminal */
 
 terminal BOOL, BREAK, CLASS, CONTINUE, ELSE, FOR, IF, RETURN, VOID, WHILE, EXTERN;
-terminal POINT, COMA, LPAR, RPAR, LKEY, RKEY, LBRACKET, RBRACKET, EXCLAMATION_MARK, SEMICOLON;
+terminal POINT, COMA, LPAR, RPAR, LKEY, RKEY, LBRACKET, RBRACKET, NOT, SEMICOLON;
 terminal String TRUE, FALSE, ID, FLOAT, INTEGER;
 
 
@@ -74,7 +75,7 @@ non terminal method_call;
 non terminal IdName id;
 non terminal Literal literal;
 non terminal BoolLiteral boolean_literal;
-non terminal bin_op, assing_op;
+non terminal AssignOpType assing_op;
 
 /* Precedences (in order from lowest to highest priority) */
 
@@ -140,7 +141,11 @@ block ::= LKEY RKEY
 		;
 
         
-type ::= INTEGER | FLOAT | BOOL | ID | VOID
+type ::= INTEGER {: RESULT = Type.INTEGER; :}
+		| FLOAT {: RESULT = Type.FLOAT; :}
+		| BOOL {: RESULT = Type.BOOL; :}
+		| VOID {: RESULT = Type.VOID; :}
+		| ID 
 		;
 
 statements ::= statement:stmt {: RESULT = new StatementList(stmt); :}
@@ -149,7 +154,7 @@ statements ::= statement:stmt {: RESULT = new StatementList(stmt); :}
 		
 statement ::= location assing_op expr SEMICOLON
 		| method_call SEMICOLON
-		| IF LPAR expr RPAR statement  {:  :}
+		| IF LPAR expr RPAR statement 
 		| IF LPAR expr RPAR statement ELSE statement
 		| FOR ID ASSIGN expr COMA expr statement
 		| WHILE expr statement
@@ -161,16 +166,16 @@ statement ::= location assing_op expr SEMICOLON
 		| block
 		;
 		
-method_call ::= id LPAR RPAR 
-		| id LPAR exprs RPAR
+method_call ::= id:i LPAR RPAR {: RESULT = new MethodCallExpr(i); :}
+		| id:i LPAR exprs:e RPAR {: RESULT = new MethodCallExpr(i,e); :}
 		;
 
-exprs ::= expr 
-		| exprs COMA expr
+exprs ::= expr:e {: RESULT = new ExpressionList(e); :}
+		| exprs:es COMA expr:e {: es.addExpressionToList(e); RESULT = es; :}
 		;
 
-location ::= id:i {: RESULT = new Location(i); :}
-		| id:i LBRACKET expr:e RBRACKET {: RESULT = new Location(i,e); :}
+location ::= id:i {: RESULT = new LocationExpr(i); :}
+		| id:i LBRACKET expr:e RBRACKET {: RESULT = new LocationExpr(i,e); :}
 		;
 
 id ::= ID:i {: RESULT = new IdName(i); :}
@@ -178,28 +183,29 @@ id ::= ID:i {: RESULT = new IdName(i); :}
 		;
 		
 expr ::= location:loc {: RESULT = loc; :}
-		| method_call
+		| method_call:mc {: RESULT = mc; :}
 		| literal:lit {: RESULT = lit; :}
-		| expr PLUS expr
-		| expr MINUS expr
-		| expr PRODUCT expr
-		| expr DIVIDE expr
-		| expr MOD expr
-		| expr LESS expr
-		| expr HIGH expr
-		| expr LESS_EQ expr
-		| expr HIGH_EQ expr
-		| expr EQUAL expr
-		| expr DISTINCT expr
-		| expr AND expr
-		| expr OR expr
-		| expr bin_op expr  
-		| MINUS expr %prec UMINUS 
-		| EXCLAMATION_MARK expr
-		| LPAR expr RPAR
+		| expr:e1 PLUS expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.PLUS,e2); :}
+		| expr:e1 MINUS expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.MINUS,e2); :}
+		| expr:e1 PRODUCT expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.PRODUCT,e2); :}
+		| expr:e1 DIVIDE expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.DIVIDE,e2); :}
+		| expr:e1 MOD expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.MOD,e2); :}
+		| expr:e1 LESS expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.LESS,e2); :}
+		| expr:e1 HIGH expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.HIGH,e2); :}
+		| expr:e1 LESS_EQ expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.LESS_EQ,e2); :}
+		| expr:e1 HIGH_EQ expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.HIGH_EQ,e2); :}
+		| expr:e1 EQUAL expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.EQUAL,e2); :}
+		| expr:e1 DISTINCT expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.DISTINCT,e2); :}
+		| expr:e1 AND expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.AND,e2); :}
+		| expr:e1 OR expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.OR,e2); :}
+		| MINUS expr:e1 %prec UMINUS {: RESULT = new UnaryOpExpr(e1,UnaryOpType.MINUS); :}
+		| NOT expr:e1 {: RESULT = new UnaryOpExpr(e1,UnaryOpType.NOT); :}
+		| LPAR expr:e RPAR {: RESULT = e; :}
 		;	      
 
-assing_op ::= ASSIGN | INC | DEC
+assing_op ::= ASSIGN {: RESULT = AssignOpType.ASSIGN; :}
+		| INC {: RESULT = AssignOpType.INC; :}
+		| DEC {: RESULT = AssignOpType.DEC; :}
 		;
 
 literal ::= FLOAT_LITERAL:f {: RESULT = new FloatLiteral(f); :}

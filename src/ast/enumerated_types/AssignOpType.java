@@ -1,11 +1,11 @@
-package ast;
+package ast.enumerated_types;
 
 public enum AssignOpType {
 	INC,
 	DEC,
 	ASSIGN;
 	
-	
+	@Override
 	public String toString() {
 		switch(this) {
 			case INC:
@@ -17,5 +17,5 @@ public enum AssignOpType {
 		}
 		
 		return null;		
-		}
+	}
 }

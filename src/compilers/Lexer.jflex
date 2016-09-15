@@ -121,7 +121,7 @@ import java_cup.runtime.*;
 	"." { return symbol(sym.POINT, yytext());}
 	"," { return symbol(sym.COMA, yytext());}
 	";" { return symbol(sym.SEMICOLON, yytext());}
-	"!" { return symbol(sym.EXCLAMATION_MARK, yytext());}
+	"!" { return symbol(sym.NOT, yytext());}
 	"(" { return symbol(sym.LPAR, yytext());}
 	")" { return symbol(sym.RPAR, yytext());}
 	"[" { return symbol(sym.LBRACKET, yytext());}

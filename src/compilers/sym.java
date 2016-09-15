@@ -20,6 +20,7 @@ public class sym {
   public static final int FOR = 7;
   public static final int MINUS = 28;
   public static final int AND = 40;
+  public static final int NOT = 21;
   public static final int SEMICOLON = 22;
   public static final int RPAR = 16;
   public static final int OR = 41;
@@ -52,7 +53,6 @@ public class sym {
   public static final int LPAR = 15;
   public static final int DEC = 44;
   public static final int FLOAT_LITERAL = 46;
-  public static final int EXCLAMATION_MARK = 21;
   public static final int FALSE = 24;
   public static final int INTEGER_LITERAL = 45;
   public static final String[] terminalNames = new String[] {
@@ -77,7 +77,7 @@ public class sym {
   "RKEY",
   "LBRACKET",
   "RBRACKET",
-  "EXCLAMATION_MARK",
+  "NOT",
   "SEMICOLON",
   "TRUE",
   "FALSE",

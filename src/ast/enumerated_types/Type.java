@@ -1,4 +1,4 @@
-package ast;
+package ast.enumerated_types;
 
 public enum Type {
 	INTEGER,
