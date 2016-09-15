@@ -67,7 +67,7 @@ non terminal method_decl, method_decls, arguments_decl;
 non terminal Type type;
 non terminal Block block;
 non terminal body;
-non terminal statement, statements;
+non terminal Statement statement, statements;
 non terminal Expression expr, exprs;
 non terminal Location location;
 non terminal method_call;
@@ -143,8 +143,8 @@ block ::= LKEY RKEY
 type ::= INTEGER | FLOAT | BOOL | ID | VOID
 		;
 
-statements ::= statement
-		| statements statement
+statements ::= statement:stmt {: RESULT = new StatementList(stmt); :}
+		| statements:stmts statement:stmt {: stmts.addStatementToList(stmt); RESULT = stmts;  :}
 		;
 		
 statement ::= location assing_op expr SEMICOLON
