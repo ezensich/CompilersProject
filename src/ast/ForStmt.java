@@ -4,12 +4,12 @@ import compilers.ASTVisitor;
 
 public class ForStmt extends Statement {
 	
-	private Identifier id;
+	private IdName id;
 	private Expression init;
 	private Expression cota;
 	private Statement forStatement;
 
-	public ForStmt(Identifier id, Expression i, Expression c, Statement forStmt){
+	public ForStmt(IdName id, Expression i, Expression c, Statement forStmt){
 		this.id = id;
 		this.init = i;
 		this.cota = c;
@@ -17,26 +17,8 @@ public class ForStmt extends Statement {
 		
 	}
 	
-	//gets and sets
-	//sets
-	public void setId(Identifier i){
-		this.id = i;
-	}
 	
-	public void setInit (Expression i){
-		this.init = i;
-	}
-	
-	public void setCota (Expression c){
-		this.cota = c;
-	}
-	
-	public void setForStatement (Statement s){
-		this.forStatement = s;
-	}
-	
-	//gets
-	public Identifier getId(){
+	public IdName getId(){
 		return this.id;
 	}
 	
@@ -54,7 +36,7 @@ public class ForStmt extends Statement {
 	
 	//method toString
 	public String toString(){
-		return id + "=" + init + "," + cota + '\n' + forStatement.toString();
+		return id.toString() + "=" + init.toString() + "," + cota.toString() + '\n' + forStatement.toString();
 	}
 	
 	public <T> T accept(ASTVisitor<T> v) {

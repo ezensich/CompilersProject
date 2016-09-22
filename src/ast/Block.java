@@ -1,11 +1,16 @@
 package ast;
 
+import java.util.LinkedList;
 import java.util.List;
 
-public abstract class Block {
+public class Block {
 	
-	public Block(){
-		
+	private StatementList listStatement;
+	private FieldDeclarationList listFieldDeclarations;
+	
+	
+	public Block(StatementList stmtList,FieldDeclarationList fieldList){
+		this.listStatement = stmtList;
+		this.listFieldDeclarations = fieldList;
 	}
-	
 }
