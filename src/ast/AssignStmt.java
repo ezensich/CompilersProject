@@ -9,21 +9,11 @@ public class AssignStmt extends Statement{
 	private LocationExpr location;
 	private AssignOpType operator;
 
-	// declared gets and sets
-	//sets
-	public void setExpression(Expression e){
+	public AssignStmt(Expression e, LocationExpr l, AssignOpType op){
 		this.expr = e;
-	}
-	
-	public void setLocation (LocationExpr l){
 		this.location = l;
+		this.operator = op;
 	}
-	
-	public void setAssignOpType (AssignOpType o){
-		this.operator = o;
-	}
-	
-	//gets 
 	public LocationExpr getLocation(){
 		return this.location;
 	}
@@ -38,12 +28,12 @@ public class AssignStmt extends Statement{
 	
 	//method toString
 	public String toString() {
-		return location + " " + operator + " " + expr;
+		return location.toString()  + " " + operator.toString() + " " + expr.toString() + ";";
 	}
 	
-	
-	public <T> T accept(ASTVisitor<T> v) {
-		return v.visit(this);
-	}
+	@Override
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 
 }

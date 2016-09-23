@@ -20,11 +20,15 @@ public class UnaryOpExpr extends Expression{
     public Expression getExpression() {
         return expr;
     }
+    
+    @Override
+    public String toString(){
+    	return operator.toString()+expr.toString();
+    }
 	
-	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 
 }

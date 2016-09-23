@@ -36,11 +36,12 @@ public class ForStmt extends Statement {
 	
 	//method toString
 	public String toString(){
-		return id.toString() + "=" + init.toString() + "," + cota.toString() + '\n' + forStatement.toString();
+		return "for " +id.toString() + " = " + init.toString() + "," + cota.toString() + '\n' + forStatement.toString() + '\n';
 	}
 	
-	public <T> T accept(ASTVisitor<T> v) {
-		return v.visit(this);
-	}
+	@Override
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 
 }

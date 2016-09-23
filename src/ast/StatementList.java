@@ -7,7 +7,7 @@ import compilers.ASTVisitor;
 
 public class StatementList extends Statement {
 
-	private static List<Statement> listStmt = new LinkedList<>();
+	private List<Statement> listStmt = new LinkedList<>();
 	
 	public StatementList(Statement stmt){
 		this.listStmt.add(stmt);
@@ -21,11 +21,20 @@ public class StatementList extends Statement {
 		return listStmt;
 	}
 
+	@Override
+    public String toString(){
+		String result = "";
+		if (listStmt != null && !listStmt.isEmpty()){
+    		for(Statement stmt : listStmt){
+    			result += stmt.toString()+'\n';
+    		}
+    	}
+    	return result;
+    }
 	
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 
 }

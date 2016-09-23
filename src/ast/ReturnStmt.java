@@ -21,16 +21,17 @@ public class ReturnStmt extends Statement {
 		this.expression = expression;
 	}
 	
-	public String toString() {
-		if (expression == null) {
-			return "return";
-		}
-		else {
-			return "return " + expression;
-		}
-	}
+	@Override
+    public String toString(){
+    	String result = "return";
+    	if(expression!= null){
+    		result += " "+expression.toString();
+    	}
+    	return result;
+    }
 	
-	public <T> T accept(ASTVisitor<T> v) {
-		return v.visit(this);
-	}
+	@Override
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 }

@@ -14,8 +14,8 @@ public class BoolLiteral extends Literal {
 	}
 
 	@Override
-	public Type getType() {
-		return Type.BOOL;
+	public GenericType getType() {
+		return new GenericType(Type.BOOL.toString());
 	}
 
 	public String getStringValue() {
@@ -40,9 +40,8 @@ public class BoolLiteral extends Literal {
 	}
 
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 
 }

@@ -2,15 +2,15 @@ package ast;
 
 import compilers.ASTVisitor;
 
-public class BreakStmt extends Statement {
+public class ContinueStmt extends Statement {
 
-	public BreakStmt(){
-		this.setBreakStmtTrue();
+	public ContinueStmt(){
+		this.setContinueStmtTrue();
 	}
 	
 	@Override
 	public String toString(){
-		return "break";
+		return "continue";
 	}
 	
 	@Override

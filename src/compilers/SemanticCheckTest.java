@@ -8,33 +8,46 @@ import java.nio.file.Files;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class ParserTest {
+import ast.Program;
+import compilers.semcheck.PrintASTVisitor;
+
+public class SemanticCheckTest {
 
 	public static void main(String argv[]) throws IOException {
 
-		if (argv.length != 0) {
+		//if (argv.length != 0) {
 			String current = new java.io.File(".").getCanonicalPath();
 			String filePath;
 
-			for (int i = 0; i < argv.length; i++) {
+			//for (int i = 0; i < argv.length; i++) {
 				try {
-					filePath = current + "/" + argv[i];
+					//filePath = current + "/" + argv[i];
+					filePath = current + "/code_examples/ejemplo.ctds";
+					System.out.println("path: "+filePath);
 					BufferedReader buffer = new BufferedReader(new FileReader(filePath));
-					System.out.println("Parsing " + argv[i]);
+					//System.out.println("Parsing " + argv[i]);
 					lexer s = new lexer(buffer);
 					@SuppressWarnings("deprecation")
 					parser p = new parser(s);
 					p.parse();
+					
+					
+					Program prog = p.getAST();
+					
+					PrintASTVisitor printAST = new PrintASTVisitor();
+					String astString = printAST.visit(prog);
+					System.out.println(astString);
+					
 
 				} catch (Exception e) {
 					e.printStackTrace(System.out);
 					System.exit(1);
 				}
-			}
+			//}
 			System.out.println("Compilation finished successfully. No errors.");
-		} else {
+		//} else {
 			System.out.println("No file selected");
-		}
+		//}
 	}
 
 }

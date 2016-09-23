@@ -7,7 +7,7 @@ import compilers.ASTVisitor;
 
 public class ExpressionList extends Expression {
 
-	private static List<Expression> listExpression = new LinkedList<>();
+	private List<Expression> listExpression = new LinkedList<>();
 	
 	public ExpressionList(Expression e){
 		this.addExpressionToList(e);
@@ -22,9 +22,22 @@ public class ExpressionList extends Expression {
 	}
 	
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toString(){
+		String result = "";
+		if (!listExpression.isEmpty()){
+			result += listExpression.get(0);
+
+			for (int i = 1; i<listExpression.size();i++){
+				result +=( "," + listExpression.get(i));
+			}
+		}
+		return result;
 	}
+	
+	
+	@Override
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 
 }

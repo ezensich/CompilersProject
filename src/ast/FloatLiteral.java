@@ -15,8 +15,8 @@ public class FloatLiteral extends Literal {
 	}
 
 	@Override
-	public Type getType() {
-		return Type.FLOAT;
+	public GenericType getType() {
+		return new GenericType(Type.FLOAT.toString());
 	}
 
 	public String getStringValue() {
@@ -41,9 +41,8 @@ public class FloatLiteral extends Literal {
 	}
 
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 
 }

@@ -22,9 +22,17 @@ public class FieldDeclarationList extends AST{
 	}
 	
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toString(){
+		String result = "";
+		for (FieldDeclaration fd : listFieldDec){
+			result += fd.toString() + '\n';
+		}
+		return result;
 	}
+	
+	@Override
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 
 }

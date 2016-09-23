@@ -19,13 +19,16 @@ public class WhileStmt extends Statement{
 		return this.whileStatement;
 	}
 	
+	@Override
 	public String toString(){
-		return "while" + condition.toString() + '\n' + whileStatement.toString();
+		return "while " + condition.toString() + '\n' + whileStatement.toString();
 		
 	}
-	public <T> T accept(ASTVisitor<T> v) {
-		return v.visit(this);
-	}
+	
+	@Override
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 	
 	
 }

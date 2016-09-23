@@ -11,20 +11,24 @@ import data_structures.Pair;
 
 public class FieldDeclaration extends AST {
 
-	private Pair<Type, Identifier> pairTypeAndId;
+	private Pair<GenericType, Identifier> pairTypeAndId;
 	
-	public FieldDeclaration(Pair pair){
+	public FieldDeclaration(Pair<GenericType, Identifier> pair){
 		this.pairTypeAndId = pair;
 	}
 	
-	public Pair<Type,Identifier> getFieldDec(){
+	public Pair<GenericType,Identifier> getFieldDec(){
 		return this.pairTypeAndId;
+	}
+	
+	@Override
+	public String toString(){
+		return pairTypeAndId.getFirst().toString() + " "+ pairTypeAndId.getSecond().toString()+";";
 	}
 
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 	
 }

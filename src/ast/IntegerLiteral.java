@@ -9,14 +9,14 @@ public class IntegerLiteral extends Literal {
 	private Integer integerValue;
 	
 
-	public IntegerLiteral(Integer val){
-		stringValue = val.toString(); 
-		integerValue = val;
+	public IntegerLiteral(String val){
+		stringValue = val; 
+		integerValue = Integer.parseInt(val);
 	}
 
 	@Override
-	public Type getType() {
-		return Type.INTEGER;
+	public GenericType getType() {
+		return new GenericType(Type.INTEGER.toString());
 	}
 
 	public String getStringValue() {
@@ -41,10 +41,9 @@ public class IntegerLiteral extends Literal {
 	}
 
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 
 
 }

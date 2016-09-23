@@ -22,11 +22,20 @@ public class Program extends AST {
 		return this.listDecClass;
 	}
 	
+	@Override
+    public String toString(){
+		String result = "";
+		if (listDecClass != null && !listDecClass.isEmpty()){
+    		for(DeclarationClass decClass : listDecClass){
+    			result += decClass.toString()+'\n';
+    		}
+    	}
+    	return result;
+    }
 	
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 
 }

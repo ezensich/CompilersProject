@@ -9,6 +9,12 @@ import java.util.List;
 
 parser code  {: 
 
+	public static Program ast;
+
+	public Program getAST(){
+	  return ast;
+	}
+
 	/* override error routines */
 
   public void report_error(String message, Object info) {
@@ -30,14 +36,8 @@ parser code  {:
     throw new RuntimeException("Fatal Syntax Error");
   } 
   
+  
 :};
-
-action code {:
-
-	Program program;
-
-:}
-
 
 /* Terminals (tokens returned by the scanner). */
 
@@ -57,7 +57,7 @@ terminal AND, OR;
 terminal ASSIGN, INC, DEC;
 
 /* literals */
-terminal Integer INTEGER_LITERAL;
+terminal String INTEGER_LITERAL;
 terminal Float FLOAT_LITERAL;
 
 /* Non-terminals */
@@ -70,8 +70,9 @@ non terminal Pair<IdName,IntegerLiteral> identifier;
 non terminal MethodDeclaration method_decl;
 non terminal MethodDeclarationList method_decls;
 non terminal ArgumentDeclaration arguments_decl;
-non terminal Type type;
-non terminal Block block, body;
+non terminal GenericType type;
+non terminal Block block; 
+non terminal Body body;
 non terminal Statement statement;
 non terminal StatementList statements;
 non terminal Expression expr;
@@ -99,7 +100,7 @@ precedence left ELSE;
 			
 start with program;			
 		
-program ::= class_decl:c {: RESULT = new Program(c); :}
+program ::= class_decl:c {: ast = new Program(c); :}
 		| class_decl:c program:p {: p.addDeclarationClass(c); RESULT = p; :}
 		;
 
@@ -132,12 +133,12 @@ method_decl ::= type:t ID:i LPAR RPAR body:b {: RESULT = new MethodDeclaration(n
 		| type:t ID:i LPAR arguments_decl:a RPAR body:b {: RESULT = new MethodDeclaration(new IdName(i),t,a,b); :}
 		;
 		
-arguments_decl ::= type:t ID:i {: RESULT = new ArgumentDeclaration(new Pair(t,i)); :}
-		| arguments_decl:list COMA type:t ID:i {: list.addArgumentDec(new Pair(t,i)); RESULT = list; :}
+arguments_decl ::= type:t ID:i {: RESULT = new ArgumentDeclaration(new Pair(t,new IdName(i))); :}
+		| arguments_decl:list COMA type:t ID:i {: list.addArgumentDec(new Pair(t,new IdName(i))); RESULT = list; :}
 		;
 
-body ::= block:b {: RESULT = b; :}
-		| EXTERN SEMICOLON
+body ::= block:b {: RESULT = new Body(b); :}
+		| EXTERN SEMICOLON {: Body body = new Body(); body.setIsExternTrue(); RESULT = body; :}
 		;
 		
 block ::= LKEY RKEY
@@ -147,29 +148,29 @@ block ::= LKEY RKEY
 		;
 
         
-type ::= INTEGER {: RESULT = Type.INTEGER; :}
-		| FLOAT {: RESULT = Type.FLOAT; :}
-		| BOOL {: RESULT = Type.BOOL; :}
-		| VOID {: RESULT = Type.VOID; :}
-		| ID 
+type ::= INTEGER {: RESULT = new GenericType(Type.INTEGER.toString()); :}
+		| FLOAT {: RESULT = new GenericType(Type.FLOAT.toString()); :}
+		| BOOL {: RESULT = new GenericType(Type.BOOL.toString()); :}
+		| VOID {: RESULT = new GenericType(Type.VOID.toString()); :}
+		| ID:i {: RESULT = new GenericType(i); :}
 		;
 
 statements ::= statement:stmt {: RESULT = new StatementList(stmt); :}
 		| statements:stmts statement:stmt {: stmts.addStatementToList(stmt); RESULT = stmts;  :}
 		;
 		
-statement ::= location assing_op expr SEMICOLON
-		| method_call SEMICOLON
+statement ::= location:loc assing_op:op expr:exp SEMICOLON {:RESULT =  new AssignStmt(exp,loc,op);:}
+		| method_call:mc SEMICOLON {: RESULT = new MethodCallStmt(mc); :}
 		| IF LPAR expr:cond RPAR statement:stmt {: RESULT = new IfStmt(cond,stmt); :}
 		| IF LPAR expr:cond RPAR statement:ifStmt ELSE statement:elseStmt {: RESULT = new IfStmt(cond,ifStmt,elseStmt); :}
 		| FOR ID:i ASSIGN expr:exp1 COMA expr:exp2 statement:forStmt {: RESULT = new ForStmt(new IdName(i),exp1,exp2,forStmt); :}
 		| WHILE expr:expr statement:stmt {: RESULT = new WhileStmt(expr,stmt); :}
-		| RETURN SEMICOLON
-		| RETURN expr SEMICOLON
+		| RETURN SEMICOLON {: RESULT = new ReturnStmt(); :}
+		| RETURN expr:e SEMICOLON {: RESULT = new ReturnStmt(e); :}
 		| BREAK SEMICOLON {: RESULT = new BreakStmt(); :}
-		| CONTINUE SEMICOLON
+		| CONTINUE SEMICOLON {: RESULT = new ContinueStmt(); :}
 		| SEMICOLON {: RESULT = new SemicolonStmt(); :}
-		| block
+		| block:b {: RESULT = b; :}
 		;
 		
 method_call ::= id:i LPAR RPAR {: RESULT = new MethodCallExpr(i); :}

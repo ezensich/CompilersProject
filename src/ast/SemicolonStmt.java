@@ -8,12 +8,15 @@ public class SemicolonStmt extends Statement{
 		
 	}
 	
+	@Override
+    public String toString(){
+    	return " ;";
+    }
 	
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 
 	
 	

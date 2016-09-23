@@ -26,10 +26,18 @@ public class LocationExpr extends Expression{
 	}
 
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toString(){
+		String result = id.toString();
+		if(expr != null){
+			result += "["+expr.toString()+"]";
+		}
+		return  result;
 	}
+	
+	@Override
+    public <T> T accept(ASTVisitor<T> v) {
+        return v.visit(this);
+    }
 	
 	
 	
