@@ -7,7 +7,7 @@ import compilers.ASTVisitor;
 
 public class FieldDeclarationList extends AST{
 	
-	private List<FieldDeclaration> listFieldDec = new LinkedList<>();
+	private List<FieldDeclaration> listFieldDec = new LinkedList<FieldDeclaration>();
 	
 	public FieldDeclarationList(FieldDeclaration fd){
 		this.listFieldDec.add(fd);

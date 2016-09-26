@@ -23,11 +23,9 @@ public class SemanticCheckTest {
 
 			for (int i = 0; i < argv.length; i++) {
 				try {
-					//filePath = current + "/" + argv[i];
-					filePath = current + "/code_examples/ejemplo.ctds";
-					System.out.println("path: "+filePath);
+					filePath = current + "/" + argv[i];
 					BufferedReader buffer = new BufferedReader(new FileReader(filePath));
-					//System.out.println("Parsing " + argv[i]);
+					System.out.println("Compiling " + filePath);
 					lexer s = new lexer(buffer);
 					@SuppressWarnings("deprecation")
 					parser p = new parser(s);
@@ -38,7 +36,7 @@ public class SemanticCheckTest {
 					
 					PrintASTVisitor printAST = new PrintASTVisitor();
 					String astString = printAST.visit(prog);
-					//System.out.println(astString);
+					
 					
 					CheckTypesASTVisitor checkTypesAST = new CheckTypesASTVisitor();
 					GenericType type = checkTypesAST.visit(prog);

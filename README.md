@@ -8,4 +8,4 @@ Ejecutar el script con "$ ./CompileProject.sh".
 
 Para ejecutar el parser, abrir un terminal del sistema y ubicarse en la carpeta del proyecto "/CompilersProject".
 Dar permiso de ejecucion al script Parser.sh con  "$ chmod +x Parser.sh".
-Ejecutar el script con "$ ./Parser.sh <archivos>".
+Ejecutar el script con "$ ./Compiler.sh <archivos>".
