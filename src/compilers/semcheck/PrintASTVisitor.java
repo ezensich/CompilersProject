@@ -1,33 +1,6 @@
 package compilers.semcheck;
 
-import ast.ArgumentDeclaration;
-import ast.AssignStmt;
-import ast.BinOpExpr;
-import ast.Block;
-import ast.Body;
-import ast.BoolLiteral;
-import ast.BreakStmt;
-import ast.ContinueStmt;
-import ast.DeclarationClass;
-import ast.ExpressionList;
-import ast.FieldDeclaration;
-import ast.FieldDeclarationList;
-import ast.FloatLiteral;
-import ast.ForStmt;
-import ast.Identifier;
-import ast.IfStmt;
-import ast.IntegerLiteral;
-import ast.LocationExpr;
-import ast.MethodCallExpr;
-import ast.MethodCallStmt;
-import ast.MethodDeclaration;
-import ast.MethodDeclarationList;
-import ast.Program;
-import ast.ReturnStmt;
-import ast.SemicolonStmt;
-import ast.StatementList;
-import ast.UnaryOpExpr;
-import ast.WhileStmt;
+import compilers.ast.*;
 import compilers.ASTVisitor;
 
 public class PrintASTVisitor implements ASTVisitor<String>{
@@ -170,6 +143,18 @@ public class PrintASTVisitor implements ASTVisitor<String>{
 	@Override
 	public String visit(Body body) {
 		return body.toString();
+	}
+
+	@Override
+	public String visit(Parameter parameter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String visit(IdentifiersList identifiersList) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

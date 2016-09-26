@@ -8,18 +8,20 @@ import java.nio.file.Files;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import ast.Program;
+import compilers.ast.Program;
+import compilers.ast.enumerated_types.GenericType;
+import compilers.semcheck.CheckTypesASTVisitor;
 import compilers.semcheck.PrintASTVisitor;
 
 public class SemanticCheckTest {
 
 	public static void main(String argv[]) throws IOException {
 
-		//if (argv.length != 0) {
+		if (argv.length != 0) {
 			String current = new java.io.File(".").getCanonicalPath();
 			String filePath;
 
-			//for (int i = 0; i < argv.length; i++) {
+			for (int i = 0; i < argv.length; i++) {
 				try {
 					//filePath = current + "/" + argv[i];
 					filePath = current + "/code_examples/ejemplo.ctds";
@@ -36,18 +38,20 @@ public class SemanticCheckTest {
 					
 					PrintASTVisitor printAST = new PrintASTVisitor();
 					String astString = printAST.visit(prog);
-					System.out.println(astString);
+					//System.out.println(astString);
 					
+					CheckTypesASTVisitor checkTypesAST = new CheckTypesASTVisitor();
+					GenericType type = checkTypesAST.visit(prog);
 
 				} catch (Exception e) {
 					e.printStackTrace(System.out);
 					System.exit(1);
 				}
-			//}
+			}
 			System.out.println("Compilation finished successfully. No errors.");
-		//} else {
+		} else {
 			System.out.println("No file selected");
-		//}
+		}
 	}
 
 }

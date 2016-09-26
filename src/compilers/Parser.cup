@@ -1,9 +1,9 @@
 // CUP specification for a simple expression evaluator (w/ actions)
 package compilers;
 
-import ast.enumerated_types.*;
-import ast.*;
-import data_structures.*;
+import compilers.ast.enumerated_types.*;
+import compilers.ast.*;
+import compilers.data_structures.*;
 import java_cup.runtime.*;
 import java.util.List;
 
@@ -20,8 +20,8 @@ parser code  {:
   public void report_error(String message, Object info) {
     StringBuilder m = new StringBuilder("Error ");
     if (info instanceof java_cup.runtime.Symbol) {
-     int column = ((java_cup.runtime.Symbol) info).right; //num of column
-     int line = ((java_cup.runtime.Symbol) info).left;//num of line
+     int column = ((java_cup.runtime.Symbol) info).right + 1; //num of column
+     int line = ((java_cup.runtime.Symbol) info).left + 1;//num of line
      Object value = ((java_cup.runtime.Symbol) info).value;//value
      m.append("in ");
      m.append( "Line: "+(line + 1)+" " );
@@ -65,8 +65,8 @@ non terminal Program program;
 non terminal DeclarationClass class_decl;
 non terminal FieldDeclaration field_decl;
 non terminal FieldDeclarationList field_decls;
-non terminal Identifier identifiers;
-non terminal Pair<IdName,IntegerLiteral> identifier;
+non terminal Identifier identifier;
+non terminal IdentifiersList identifiers;
 non terminal MethodDeclaration method_decl;
 non terminal MethodDeclarationList method_decls;
 non terminal ArgumentDeclaration arguments_decl;
@@ -86,14 +86,14 @@ non terminal AssignOpType assing_op;
 
 /* Precedences (in order from lowest to highest priority) */
 
-precedence left OR;
-precedence left AND;
+precedence left + 1 OR;
+precedence left + 1 AND;
 precedence nonassoc EQUAL, DISTINCT;
 precedence nonassoc LESS, HIGH, LESS_EQ, HIGH_EQ; 
-precedence left MINUS, PLUS;
-precedence left UMINUS;
-precedence left PRODUCT, DIVIDE, MOD;
-precedence left ELSE;
+precedence left + 1 MINUS, PLUS;
+precedence left + 1 UMINUS;
+precedence left + 1 PRODUCT, DIVIDE, MOD;
+precedence left + 1 ELSE;
 
 
 /* The grammar */
@@ -114,15 +114,15 @@ field_decls ::= field_decl:fd {: RESULT = new FieldDeclarationList(fd); :}
 		| field_decls:fdlist field_decl:fd {: fdlist.addFieldDecToList(fd); :} 
 		;
 
-field_decl ::= type:t identifiers:i SEMICOLON {: RESULT = new FieldDeclaration(new Pair(t,i)); :}
+field_decl ::= type:t identifiers:i SEMICOLON {: RESULT = new FieldDeclaration(t,i); :}
 		;
 
-identifiers ::= identifier:id {: RESULT = new Identifier(id); :}
+identifiers ::= identifier:id {: RESULT = new IdentifiersList(id); :}
 		| identifiers:list COMA identifier:i {: list.addIdentifierToList(i); RESULT = list; :}
 		;
 
-identifier ::= ID:i {: RESULT = new Pair(new IdName(i),null); :}
-		| ID:i LBRACKET INTEGER_LITERAL:n RBRACKET {: RESULT = new Pair(new IdName(i),n); :}
+identifier ::= ID:i {: RESULT = new Identifier(new IdName(i),ileft + 1,iright + 1); :}
+		| ID:i LBRACKET INTEGER_LITERAL:n RBRACKET {: RESULT = new Identifier(new IdName(i),new IntegerLiteral(n,ileft + 1,iright + 1),ileft + 1,iright + 1); :}
 		;
 
 method_decls ::= method_decl:md {: RESULT = new MethodDeclarationList(md); :}
@@ -133,8 +133,8 @@ method_decl ::= type:t ID:i LPAR RPAR body:b {: RESULT = new MethodDeclaration(n
 		| type:t ID:i LPAR arguments_decl:a RPAR body:b {: RESULT = new MethodDeclaration(new IdName(i),t,a,b); :}
 		;
 		
-arguments_decl ::= type:t ID:i {: RESULT = new ArgumentDeclaration(new Pair(t,new IdName(i))); :}
-		| arguments_decl:list COMA type:t ID:i {: list.addArgumentDec(new Pair(t,new IdName(i))); RESULT = list; :}
+arguments_decl ::= type:t ID:i {: RESULT = new ArgumentDeclaration(new Parameter(t,new IdName(i))); :}
+		| arguments_decl:list COMA type:t ID:i {: list.addArgumentDec(new Parameter(t,new IdName(i))); RESULT = list; :}
 		;
 
 body ::= block:b {: RESULT = new Body(b); :}
@@ -159,7 +159,7 @@ statements ::= statement:stmt {: RESULT = new StatementList(stmt); :}
 		| statements:stmts statement:stmt {: stmts.addStatementToList(stmt); RESULT = stmts;  :}
 		;
 		
-statement ::= location:loc assing_op:op expr:exp SEMICOLON {:RESULT =  new AssignStmt(exp,loc,op);:}
+statement ::= location:loc assing_op:op expr:exp SEMICOLON {:RESULT =  new AssignStmt(exp,loc,op,locleft + 1,locright + 1);:}
 		| method_call:mc SEMICOLON {: RESULT = new MethodCallStmt(mc); :}
 		| IF LPAR expr:cond RPAR statement:stmt {: RESULT = new IfStmt(cond,stmt); :}
 		| IF LPAR expr:cond RPAR statement:ifStmt ELSE statement:elseStmt {: RESULT = new IfStmt(cond,ifStmt,elseStmt); :}
@@ -173,16 +173,16 @@ statement ::= location:loc assing_op:op expr:exp SEMICOLON {:RESULT =  new Assig
 		| block:b {: RESULT = b; :}
 		;
 		
-method_call ::= id:i LPAR RPAR {: RESULT = new MethodCallExpr(i); :}
-		| id:i LPAR exprs:e RPAR {: RESULT = new MethodCallExpr(i,e); :}
+method_call ::= id:i LPAR RPAR {: RESULT = new MethodCallExpr(i,ileft + 1,iright + 1); :}
+		| id:i LPAR exprs:e RPAR {: RESULT = new MethodCallExpr(i,e,ileft + 1,iright + 1); :}
 		;
 
 exprs ::= expr:e {: RESULT = new ExpressionList(e); :}
 		| exprs:es COMA expr:e {: es.addExpressionToList(e); RESULT = es; :}
 		;
 
-location ::= id:i {: RESULT = new LocationExpr(i); :}
-		| id:i LBRACKET expr:e RBRACKET {: RESULT = new LocationExpr(i,e); :}
+location ::= id:i {: RESULT = new LocationExpr(i,ileft + 1,iright + 1); :}
+		| id:i LBRACKET expr:e RBRACKET {: RESULT = new LocationExpr(i,e,ileft + 1,iright + 1); :}
 		;
 
 id ::= ID:i {: RESULT = new IdName(i); :}
@@ -192,21 +192,21 @@ id ::= ID:i {: RESULT = new IdName(i); :}
 expr ::= location:loc {: RESULT = loc; :}
 		| method_call:mc {: RESULT = mc; :}
 		| literal:lit {: RESULT = lit; :}
-		| expr:e1 PLUS expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.PLUS,e2); :}
-		| expr:e1 MINUS expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.MINUS,e2); :}
-		| expr:e1 PRODUCT expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.PRODUCT,e2); :}
-		| expr:e1 DIVIDE expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.DIVIDE,e2); :}
-		| expr:e1 MOD expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.MOD,e2); :}
-		| expr:e1 LESS expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.LESS,e2); :}
-		| expr:e1 HIGH expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.HIGH,e2); :}
-		| expr:e1 LESS_EQ expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.LESS_EQ,e2); :}
-		| expr:e1 HIGH_EQ expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.HIGH_EQ,e2); :}
-		| expr:e1 EQUAL expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.EQUAL,e2); :}
-		| expr:e1 DISTINCT expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.DISTINCT,e2); :}
-		| expr:e1 AND expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.AND,e2); :}
-		| expr:e1 OR expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.OR,e2); :}
-		| MINUS expr:e1 {: RESULT = new UnaryOpExpr(e1,UnaryOpType.MINUS); :} %prec UMINUS 
-		| NOT expr:e1 {: RESULT = new UnaryOpExpr(e1,UnaryOpType.NOT); :}
+		| expr:e1 PLUS expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.PLUS,e2,e1left + 1,e1right + 1); :}
+		| expr:e1 MINUS expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.MINUS,e2,e1left + 1,e1right + 1); :}
+		| expr:e1 PRODUCT expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.PRODUCT,e2,e1left + 1,e1right + 1); :}
+		| expr:e1 DIVIDE expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.DIVIDE,e2,e1left + 1,e1right + 1); :}
+		| expr:e1 MOD expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.MOD,e2,e1left + 1,e1right + 1); :}
+		| expr:e1 LESS expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.LESS,e2,e1left + 1,e1right + 1); :}
+		| expr:e1 HIGH expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.HIGH,e2,e1left + 1,e1right + 1); :}
+		| expr:e1 LESS_EQ expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.LESS_EQ,e2,e1left + 1,e1right + 1); :}
+		| expr:e1 HIGH_EQ expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.HIGH_EQ,e2,e1left + 1,e1right + 1); :}
+		| expr:e1 EQUAL expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.EQUAL,e2,e1left + 1,e1right + 1); :}
+		| expr:e1 DISTINCT expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.DISTINCT,e2,e1left + 1,e1right + 1); :}
+		| expr:e1 AND expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.AND,e2,e1left + 1,e1right + 1); :}
+		| expr:e1 OR expr:e2 {: RESULT = new BinOpExpr(e1,BinOpType.OR,e2,e1left + 1,e1right + 1); :}
+		| MINUS expr:e1 {: RESULT = new UnaryOpExpr(e1,UnaryOpType.MINUS,e1left + 1,e1right + 1); :} %prec UMINUS 
+		| NOT expr:e1 {: RESULT = new UnaryOpExpr(e1,UnaryOpType.NOT,e1left + 1,e1right + 1); :} %prec UMINUS
 		| LPAR expr:e RPAR {: RESULT = e; :}
 		;	      
 
@@ -215,11 +215,11 @@ assing_op ::= ASSIGN {: RESULT = AssignOpType.ASSIGN; :}
 		| DEC {: RESULT = AssignOpType.DEC; :}
 		;
 
-literal ::= FLOAT_LITERAL:f {: RESULT = new FloatLiteral(f); :}
+literal ::= FLOAT_LITERAL:f {: RESULT = new FloatLiteral(f,fleft + 1,fright + 1); :}
 		| boolean_literal:b {: RESULT = b; :}
-		| INTEGER_LITERAL:i {: RESULT = new IntegerLiteral(i); :}
+		| INTEGER_LITERAL:i {: RESULT = new IntegerLiteral(i,ileft + 1,iright + 1); :}
 		;
 
-boolean_literal ::= TRUE:t {: RESULT = new BoolLiteral(t); :}
-		| FALSE:f {: RESULT = new BoolLiteral(f); :}
+boolean_literal ::= TRUE:t {: RESULT = new BoolLiteral(t,tleft + 1,tright + 1); :}
+		| FALSE:f {: RESULT = new BoolLiteral(f,fleft + 1,fright + 1); :}
 		;

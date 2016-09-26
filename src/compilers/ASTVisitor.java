@@ -1,6 +1,6 @@
 package compilers;
 
-import ast.*;
+import compilers.ast.*;
 
 public interface ASTVisitor<T> {
 
@@ -58,6 +58,7 @@ public interface ASTVisitor<T> {
 
 	// visit identifier
 	T visit(Identifier id);
+	T visit(IdentifiersList identifiersList);
 	
 	// visit locations
 	// T visit(VarLocation loc);
@@ -70,4 +71,7 @@ public interface ASTVisitor<T> {
 	// visit methodDecl
 	T visit(MethodDeclaration methD);
 	T visit(MethodDeclarationList methDecList);
+	
+	// visit parameter
+	T visit(Parameter parameter);
 }
