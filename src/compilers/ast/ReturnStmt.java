@@ -22,15 +22,6 @@ public class ReturnStmt extends Statement {
 	}
 	
 	@Override
-    public String toString(){
-    	String result = "return";
-    	if(expression!= null){
-    		result += " "+expression.toString();
-    	}
-    	return result;
-    }
-	
-	@Override
     public <T> T accept(ASTVisitor<T> v) {
         return v.visit(this);
     }

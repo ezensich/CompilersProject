@@ -14,21 +14,12 @@ public class MethodCallStmt extends Statement{
 	}
 	
 	public IdName getIdName(){
-		return this.getIdName();
+		return this.methodId;
 	}
 	
 	public ExpressionList getExpressionList(){
-		return this.getExpressionList();
+		return this.listExpr;
 	}
-	
-	@Override
-    public String toString(){
-		String result = methodId.toString();
-    	if (listExpr!= null ){
-    		result += "(" + listExpr.toString() + ")";
-    	}
-    	return  result;
-    }
 	
 	@Override
     public <T> T accept(ASTVisitor<T> v) {

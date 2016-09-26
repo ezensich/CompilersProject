@@ -23,19 +23,6 @@ public class Block extends Statement{
 	}
 
 	@Override
-	public String toString(){
-		String listStmt = "";
-		String listField = "";
-		if(this.listStatement != null){
-			listStmt = listStatement.toString();
-		}
-		if(this.listFieldDeclarations != null){
-			listField = listFieldDeclarations.toString();
-		}
-		return "{  "+listField + listStmt+ " }";
-	}
-
-	@Override
     public <T> T accept(ASTVisitor<T> v) {
         return v.visit(this);
     }

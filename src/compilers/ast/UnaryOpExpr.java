@@ -22,11 +22,6 @@ public class UnaryOpExpr extends Expression{
     public Expression getExpression() {
         return expr;
     }
-    
-    @Override
-    public String toString(){
-    	return operator.toString()+expr.toString();
-    }
 	
     @Override
     public <T> T accept(ASTVisitor<T> v) {

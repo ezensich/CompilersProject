@@ -26,16 +26,6 @@ public class Body extends AST {
 	public Block getBlock(){
 		return this.block;
 	}
-	
-	@Override
-	public String toString(){
-		if (isExtern){
-			return "extern ;";
-		}
-		else{
-			return block.toString();
-		}
-	}
 
 	@Override
     public <T> T accept(ASTVisitor<T> v) {

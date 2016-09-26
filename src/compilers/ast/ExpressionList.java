@@ -22,20 +22,6 @@ public class ExpressionList extends Expression {
 	}
 	
 	@Override
-	public String toString(){
-		String result = "";
-		if (!listExpression.isEmpty()){
-			result += listExpression.get(0);
-
-			for (int i = 1; i<listExpression.size();i++){
-				result +=( "," + listExpression.get(i));
-			}
-		}
-		return result;
-	}
-	
-	
-	@Override
     public <T> T accept(ASTVisitor<T> v) {
         return v.visit(this);
     }

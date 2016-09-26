@@ -44,17 +44,6 @@ public class IfStmt extends Statement {
 	}
 
 	@Override
-	public String toString() {
-		String result = "if (" + condition.toString() + ") \n" + ifStatement.toString() + "\n";
-
-		if (elseStatement != null) {
-			result += "else \n" + elseStatement.toString() + "\n";
-		}
-
-		return result;
-	}
-
-	@Override
 	public <T> T accept(ASTVisitor<T> v) {
 		return v.visit(this);
 	}

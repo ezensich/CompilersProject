@@ -21,18 +21,6 @@ public class ArgumentDeclaration extends AST {
 	public List<Parameter> getArgumentsList(){
 		return this.listArgumentsDec;
 	}
- 	
-	@Override
-	public String toString(){
-		String result = "";
-		/*if(listArgumentsDec != null && !listArgumentsDec.isEmpty()){
-			result += listArgumentsDec.get(0).getFirst().toString() + " "+listArgumentsDec.get(0).getSecond().toString();
-			for (int i = 1; i<listArgumentsDec.size();i++){
-				result += ", "+listArgumentsDec.get(0).getFirst().toString() + " "+listArgumentsDec.get(0).getSecond().toString();
-			}
-		} */
-		return result;
-	}
 
 	@Override
     public <T> T accept(ASTVisitor<T> v) {

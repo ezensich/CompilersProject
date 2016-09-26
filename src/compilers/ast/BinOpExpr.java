@@ -40,11 +40,6 @@ public class BinOpExpr extends Expression {
 	}
 
 	@Override
-	public String toString() {
-		return lExpr.toString() + " " + operator.toString() + " " + rExpr.toString();
-	}
-
-	@Override
 	public <T> T accept(ASTVisitor<T> v) {
 		return v.visit(this);
 	}

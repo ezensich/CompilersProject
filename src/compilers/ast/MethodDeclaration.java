@@ -51,18 +51,6 @@ public class MethodDeclaration extends AST {
 	}
 
 	@Override
-    public String toString(){
-		String result = type.toString() + " " + id.toString();
-		if (arguments != null){
-			result += "("+arguments.toString()+") \n "+body.toString();
-		}
-		else{
-			result += "() \n "+body.toString();
-		}
-    	return result;
-    }
-
-	@Override
     public <T> T accept(ASTVisitor<T> v) {
         return v.visit(this);
     }

@@ -20,11 +20,6 @@ public class Parameter extends AST {
         return id;
     }
     
-    @Override
-    public String toString(){
-         return type.toString() + " " + id;
-    }
-
 	@Override
 	public <T> T accept(ASTVisitor<T> v) {
 		return v.visit(this);

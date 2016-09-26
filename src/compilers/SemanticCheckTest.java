@@ -33,13 +33,16 @@ public class SemanticCheckTest {
 					parser p = new parser(s);
 					p.parse();
 					
-					
+					//obtengo el AST
 					Program prog = p.getAST();
 					
+					//Muestro por pantalla el AST a traves de un visitor
 					PrintASTVisitor printAST = new PrintASTVisitor();
 					String astString = printAST.visit(prog);
 					//System.out.println(astString);
 					
+					
+					//visitors para el chequeo semantico
 					CheckTypesASTVisitor checkTypesAST = new CheckTypesASTVisitor();
 					GenericType checkType = checkTypesAST.visit(prog);
 					

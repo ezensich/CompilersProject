@@ -28,11 +28,6 @@ public class AssignStmt extends Statement{
 		return this.operator;
 	}
 	
-	//method toString
-	public String toString() {
-		return location.toString()  + " " + operator.toString() + " " + expr.toString() + ";";
-	}
-	
 	@Override
     public <T> T accept(ASTVisitor<T> v) {
         return v.visit(this);

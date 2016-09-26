@@ -20,12 +20,6 @@ public class WhileStmt extends Statement{
 	}
 	
 	@Override
-	public String toString(){
-		return "while " + condition.toString() + '\n' + whileStatement.toString();
-		
-	}
-	
-	@Override
     public <T> T accept(ASTVisitor<T> v) {
         return v.visit(this);
     }
