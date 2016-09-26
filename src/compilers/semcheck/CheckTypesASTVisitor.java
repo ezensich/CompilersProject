@@ -15,20 +15,16 @@ import compilers.symbol_table.*;
 public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 
 	private SymbolTable symbolTable;
-	private List<Error> errors;
+	private List<String> errorList;
 
 	public CheckTypesASTVisitor() {
-		this.errors = new LinkedList<Error>();
+		this.errorList = new LinkedList<String>();
 		symbolTable = new SymbolTable();
 
 	}
-
-	public List<Error> getErrors() {
-		return errors;
-	}
-
-	public void setErrors(LinkedList<Error> errors) {
-		this.errors = errors;
+	
+	public List<String> getErrorList(){
+		return this.errorList;
 	}
 
 	public SymbolTable getSymbolTable() {
@@ -38,8 +34,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 	@Override
 	public GenericType visit(Program prog) {
 		if (prog.getListDeclarationClass() == null || prog.getListDeclarationClass().isEmpty()) {
-			System.err.println("Error, no hay clases definidas en el programa");
-			System.exit(1);
+			errorList.add("Error, no hay clases definidas en el programa");
 		} else {
 			for (DeclarationClass dc : prog.getListDeclarationClass()) {
 				dc.accept(this);
@@ -49,21 +44,17 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 		if (symbolTable.existClassSymbolTable("Main")) {
 			MethodSymbolTable meth = symbolTable.getMethodSymbolTable("Main", "main");
 			if (meth == null) {
-				System.err.println("error. La clase debe contener un metodo main");
-				System.exit(1);
+				errorList.add("error. La clase debe contener un metodo main");
 			}
 			if (!meth.getParameterList().isEmpty()) {
-				System.err.println("error. El metodo main no debe contener parametros");
-				System.exit(1);
+				errorList.add("error. El metodo main no debe contener parametros");
 			} else {
 				if (!meth.getReturnType().isVoid()) {
-					System.err.println("error. el metodo main debe retornar void");
-					System.exit(1);
+					errorList.add("error. el metodo main debe retornar void");
 				}
 			}
 		} else {
-			System.err.println("El programa debe contener una clase main");
-			System.exit(1);
+			errorList.add("El programa debe contener una clase main");
 		}
 		return null;
 
@@ -124,29 +115,25 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 		if (loc != null) {
 			GenericType typeStmt = stmt.getExpression().accept(this);
 			if (loc.getType().toString() != typeStmt.toString()) {
-				System.err.println("error de tipos, linea: " + stmt.getExpression().getLineNumber() + " columna: "
+				errorList.add("error de tipos, linea: " + stmt.getExpression().getLineNumber() + " columna: "
 						+ stmt.getExpression().getColumnNumber());
-				System.exit(1);
 			}
 			// si es += o -= y la variable no es float o int se rompe
 			if (!loc.getType().isFloat() && !loc.getType().isInteger()
 					&& (stmt.getAssignOpType().isDecrement() || stmt.getAssignOpType().isIncrement())) {
-				System.err.println("No se puede aplicar " + stmt.getAssignOpType().toString()
+				errorList.add("No se puede aplicar " + stmt.getAssignOpType().toString()
 						+ " a una variable de tipo " + loc.getType().toString() + ". linea: "
 						+ stmt.getExpression().getLineNumber() + " columna: " + stmt.getExpression().getColumnNumber());
-				System.exit(1);
 			}
 			// si la variable definida NO es un arreglo pero en la location si
 			// lo usa como arreglo se rompe
 			if (loc.getSize() == 0 && stmt.getLocation().getExpr() != null) {
-				System.err.println("La variable " + loc.getName() + " No es un arreglo. linea: "
+				errorList.add("La variable " + loc.getName() + " No es un arreglo. linea: "
 						+ stmt.getLocation().getLineNumber() + " columna: " + stmt.getLocation().getColumnNumber());
-				System.exit(1);
 			}
 		} else {
-			System.err.println("variable no definida, linea: " + stmt.getLocation().getLineNumber() + " columna: "
+			errorList.add("variable no definida, linea: " + stmt.getLocation().getLineNumber() + " columna: "
 					+ stmt.getLocation().getColumnNumber());
-			System.exit(1);
 		}
 		return new GenericType(Type.VOID.toString());
 	}
@@ -162,9 +149,8 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 	@Override
 	public GenericType visit(IfStmt stmt) {
 		if (!stmt.getCondition().accept(this).isBool()) {
-			System.err.println("Condicion del if no es booleana, linea: " + stmt.getCondition().getLineNumber()
+			errorList.add("Condicion del if no es booleana, linea: " + stmt.getCondition().getLineNumber()
 					+ " columna: " + stmt.getCondition().getColumnNumber());
-			System.exit(1);
 		} else {
 			stmt.getIfStatement().accept(this);
 			if (stmt.getElseStatement() != null) {
@@ -178,9 +164,8 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 	public GenericType visit(WhileStmt stmt) {
 		GenericType type = stmt.getCondition().accept(this);
 		if (!type.isBool()) {
-			System.err.println("El tipo de la expresion debe ser bool. linea: " + stmt.getCondition().getLineNumber()
+			errorList.add("El tipo de la expresion debe ser bool. linea: " + stmt.getCondition().getLineNumber()
 					+ " columna: " + stmt.getCondition().getColumnNumber());
-			System.exit(1);
 		} else {
 			stmt.getStatementCondition().accept(this);
 		}
@@ -193,14 +178,12 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 		GenericType typeExpCota = stmt.getCota().accept(this);
 		// las expresion de inicio debe ser entero unicamente
 		if (!typeExpInit.isInteger()) {
-			System.err.println("El tipo de la expresion de inicio debe ser int linea: " + stmt.getInit().getLineNumber()
+			errorList.add("El tipo de la expresion de inicio debe ser int linea: " + stmt.getInit().getLineNumber()
 					+ " columna: " + stmt.getInit().getColumnNumber());
-			System.exit(1);
 		}
 		if (!typeExpCota.isBool()) {
-			System.err.println("El tipo de la expresion debe ser bool. linea: " + stmt.getCota().getLineNumber()
+			errorList.add("El tipo de la expresion debe ser bool. linea: " + stmt.getCota().getLineNumber()
 					+ " columna: " + stmt.getCota().getColumnNumber());
-			System.exit(1);
 		} else {
 			stmt.getForStatement().accept(this);
 		}
@@ -263,10 +246,9 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 							}
 							symbolTable.setVarBlockSymbolTable(attr);
 						} else {
-							System.err.println("Error, ya existe una variable en el bloque corriente'"
+							errorList.add("Error, ya existe una variable en el bloque corriente'"
 									+ identifier.getId().getId() + "'" + ", linea: " + identifier.getLineNumber()
 									+ " columna: " + identifier.getColumnNumber());
-							System.exit(1);
 						}
 					}
 				}
@@ -278,8 +260,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 										 */
 		for (Statement s : block.getStmtList().getStatementList()) {
 			if (!lastType.getType().equals((Type.VOID.toString()))) {
-				System.err.println("No se puede tener sentencias despues de un return");
-				System.exit(1);
+				errorList.add("No se puede tener sentencias despues de un return");
 			}
 			lastType = s.accept(this);
 		}
@@ -297,23 +278,20 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 	public GenericType visit(LocationExpr locExpr) {
 		AttributeSymbolTable var = symbolTable.getAttributeSymbolTable(locExpr.getId().getId());
 		if (var == null) {
-			System.err.println("variable '" + locExpr.getId().getId() + "' no definida, linea: "
+			errorList.add("variable '" + locExpr.getId().getId() + "' no definida, linea: "
 					+ locExpr.getLineNumber() + " columna: " + locExpr.getColumnNumber());
-			System.exit(1);
 			return null;
 		} else {
 			if (var.getSize() > 0) {
 				if (locExpr.getExpr() != null) {
 					GenericType t = locExpr.getExpr().accept(this);
 					if (!t.isInteger()) {
-						System.err.println("el tipo de expr debe ser int." + locExpr.getExpr().getLineNumber()
+						errorList.add("el tipo de expr debe ser int." + locExpr.getExpr().getLineNumber()
 								+ " columna: " + locExpr.getExpr().getColumnNumber());
-						System.exit(1);
 					}
 				} else {
-					System.err.println("el arreglo se esta usando como una variable " + locExpr.getLineNumber()
+					errorList.add("el arreglo se esta usando como una variable " + locExpr.getLineNumber()
 							+ " columna: " + locExpr.getColumnNumber());
-					System.exit(1);
 				}
 			}
 			return var.getType();
@@ -325,10 +303,9 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 		GenericType typeLeft = expr.getLeftExpr().accept(this);
 		GenericType typeRight = expr.getRightExpr().accept(this);
 		if (typeLeft.getType() != typeRight.getType()) {
-			System.err.println("error de tipos, no se puede hacer " + typeLeft.toString()
+			errorList.add("error de tipos, no se puede hacer " + typeLeft.toString()
 					+ expr.getOperator().toString() + typeRight.toString() + ", linea: " + expr.getLineNumber()
 					+ " columna: " + expr.getColumnNumber());
-			System.exit(1);
 		}
 		BinOpType op = expr.getOperator();
 		// CORROBORO QUE SI SON OPERACIONES RELACIONALES O LOGICAS LOS OPERANDOS
@@ -348,18 +325,16 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 		if (unaryExpr.getOperator() == UnaryOpType.MINUS) {
 			// el tipo de la expresión debe ser si o si float o int
 			if (!typeExpr.isFloat() && !typeExpr.isInteger()) {
-				System.err.println("no se puede aplicar '-' a una expresión de tipo " + typeExpr.toString()
+				errorList.add("no se puede aplicar '-' a una expresión de tipo " + typeExpr.toString()
 						+ ", linea: " + unaryExpr.getLineNumber() + " columna: " + unaryExpr.getColumnNumber());
-				System.exit(1);
 			} else {
 				return typeExpr;
 			}
 		} else {
 			// el tipo debe ser booleano
 			if (!typeExpr.isBool()) {
-				System.err.println("no se puede aplicar '!' a una expresión de tipo " + typeExpr.toString()
+				errorList.add("no se puede aplicar '!' a una expresión de tipo " + typeExpr.toString()
 						+ ", linea: " + unaryExpr.getLineNumber() + " columna: " + unaryExpr.getColumnNumber());
-				System.exit(1);
 			} else {
 				return new GenericType(Type.BOOL.toString());
 			}
@@ -374,18 +349,16 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 		if (meth.getParameterList() != null && methExpr.getExpressionList() != null
 				&& methExpr.getExpressionList().getExpressionList() != null) {
 			if (meth.getParameterList().size() != methExpr.getExpressionList().getExpressionList().size()) {
-				System.err.println("Error en la cantidad de parametros en la llamada del metodo "
+				errorList.add("Error en la cantidad de parametros en la llamada del metodo "
 						+ methExpr.getIdName().toString() + ", linea: " + methExpr.getLineNumber());
-				System.exit(1);
 			}
 		}
 		if (methExpr.getExpressionList() != null && methExpr.getExpressionList().getExpressionList() != null) {
 			for (int i = 0; i < methExpr.getExpressionList().getExpressionList().size(); i++) {
 				if (!methExpr.getExpressionList().getExpressionList().get(i).accept(this).toString().equals((meth.getParameterList()
 						.get(i).getType().getType()))) {
-					System.err.println("Error de tipo de parametros en la llamada del metodo "
+					errorList.add("Error de tipo de parametros en la llamada del metodo "
 							+ methExpr.getIdName().getId() + ", linea: " + methExpr.getLineNumber());
-					System.exit(1);
 				}
 			}
 		}
@@ -439,9 +412,8 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 						// ignoro el analisis de retorno
 		{
 			if (methD.getType().getType() != ret.getType()) {
-				System.err.println("Error de tipo, el tipo de retorno del metodo es " + methD.getType().getType()
+				errorList.add("Error de tipo, el tipo de retorno del metodo es " + methD.getType().getType()
 						+ " y el tipo retornado es " + ret.getType());
-				System.exit(1);
 			}
 		}
 		symbolTable.popBlockSymbolTable();
@@ -461,8 +433,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 			attr = new AttributeSymbolTable(null, p.getType(), p.getId().getId());
 			symbolTable.setVarBlockSymbolTable(attr);
 		} else {
-			System.err.println("Error, ya existe una parametro en el metodo '" + p.getId().getId() + "'");
-			System.exit(1);
+			errorList.add("Error, ya existe una parametro en el metodo '" + p.getId().getId() + "'");
 		}
 		return null;
 	}
