@@ -111,7 +111,7 @@ class_decl ::= CLASS ID:i LKEY  RKEY {: RESULT = new DeclarationClass(new IdName
 		;
 
 field_decls ::= field_decl:fd {: RESULT = new FieldDeclarationList(fd); :}
-		| field_decls:fdlist field_decl:fd {: fdlist.addFieldDecToList(fd); :} 
+		| field_decls:fdlist field_decl:fd {: fdlist.addFieldDecToList(fd); RESULT = fdlist; :} 
 		;
 
 field_decl ::= type:t identifiers:i SEMICOLON {: RESULT = new FieldDeclaration(t,i); :}

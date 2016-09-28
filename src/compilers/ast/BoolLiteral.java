@@ -7,6 +7,7 @@ import compilers.ASTVisitor;
 public class BoolLiteral extends Literal {
 	private String stringValue;
 	private Boolean booleanValue;
+	private GenericType type = new GenericType(Type.BOOL.toString());
 	
 
 	public BoolLiteral(String val, int line, int col){
@@ -18,7 +19,7 @@ public class BoolLiteral extends Literal {
 
 	@Override
 	public GenericType getType() {
-		return new GenericType(Type.BOOL.toString());
+		return this.type;
 	}
 
 	public String getStringValue() {

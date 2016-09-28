@@ -1,6 +1,7 @@
 package compilers.ast;
 
 import compilers.ASTVisitor;
+import compilers.ast.enumerated_types.GenericType;
 
 public class LocationExpr extends Expression{
 
@@ -27,6 +28,11 @@ public class LocationExpr extends Expression{
 
 	public Expression getExpr() {
 		return expr;
+	}
+	
+	@Override
+	public GenericType getType() {
+		return this.expr.getType();
 	}
 	
 	@Override

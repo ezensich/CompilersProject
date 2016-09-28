@@ -1,5 +1,6 @@
 package compilers.semcheck;
 
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,6 +37,12 @@ import compilers.ast.StatementList;
 import compilers.ast.UnaryOpExpr;
 import compilers.ast.WhileStmt;
 
+/*
+ *   Esta clase es la encargada de hacer el chequeo semantico diferentes reglas provistas por
+ * la descripcion del lenguaje. Las reglas que valida son las siguientes:
+ *   Regla 18: Las sentencias 'break' y 'continue' solo pueden encontrarse en el cuerpo de un
+ * ciclo.
+ */
 public class BreakContinueASTVisitor implements ASTVisitor<String> {
 
 	private List<String> errorList;

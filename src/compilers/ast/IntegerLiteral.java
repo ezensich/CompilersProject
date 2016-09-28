@@ -8,6 +8,7 @@ public class IntegerLiteral extends Literal {
 
 	private String stringValue;
 	private Integer integerValue;
+	private GenericType type = new GenericType(Type.INTEGER.toString());
 	
 
 	public IntegerLiteral(String val, int line, int col){
@@ -19,7 +20,7 @@ public class IntegerLiteral extends Literal {
 
 	@Override
 	public GenericType getType() {
-		return new GenericType(Type.INTEGER.toString());
+		return this.type;
 	}
 
 	public String getStringValue() {

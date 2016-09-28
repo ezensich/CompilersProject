@@ -667,7 +667,7 @@ class CUP$parser$actions {
 		int fdleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int fdright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		FieldDeclaration fd = (FieldDeclaration)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 fdlist.addFieldDecToList(fd); 
+		 fdlist.addFieldDecToList(fd); RESULT = fdlist; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("field_decls",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

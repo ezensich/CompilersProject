@@ -9,7 +9,6 @@ import compilers.ast.enumerated_types.GenericType;
 import compilers.ast.enumerated_types.Type;
 import compilers.ast.enumerated_types.UnaryOpType;
 import compilers.ASTVisitor;
-import compilers.data_structures.Pair;
 import compilers.symbol_table.*;
 
 public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
@@ -64,7 +63,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 	public GenericType visit(DeclarationClass decClass) {
 
 		ClassSymbolTable c = new ClassSymbolTable();
-		symbolTable.pushClassSymbolTable(decClass.getIdName().toString(), c);
+		symbolTable.pushClassSymbolTable(decClass.getIdName().getId(), c);
 		symbolTable.pushBlockSymbolTable(new BlockSymbolTable());
 		if (decClass.getFieldDecList() != null && decClass.getFieldDecList().getFieldDecList() != null
 				&& !decClass.getFieldDecList().getFieldDecList().isEmpty()) {
@@ -237,6 +236,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 					for (Identifier identifier : listIdentifier) {
 						// creo un atributo
 						AttributeSymbolTable attr;
+						
 						if (symbolTable.getAttributeSymbolTableSameBlock(identifier.getId().getId()) == null) {
 							if (identifier.getSize() == null) {
 								attr = new AttributeSymbolTable(null, fd.getType(), identifier.getId().getId());
@@ -302,7 +302,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 	public GenericType visit(BinOpExpr expr) {
 		GenericType typeLeft = expr.getLeftExpr().accept(this);
 		GenericType typeRight = expr.getRightExpr().accept(this);
-		if (typeLeft.getType() != typeRight.getType()) {
+		if (!typeLeft.getType().equals(typeRight.getType())){
 			errorList.add("error de tipos, no se puede hacer " + typeLeft.toString()
 					+ expr.getOperator().toString() + typeRight.toString() + ", linea: " + expr.getLineNumber()
 					+ " columna: " + expr.getColumnNumber());
@@ -312,7 +312,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 		// SEAN LOGICOS Y QUE RETORNE ALGO LOGICO
 		if (op.isConditional() || op.isEquational() || op.isRelational()) {
 			expr.setType(new GenericType(Type.BOOL.toString()));
-			return new GenericType(Type.BOOL.toString());
+			return expr.getType();
 		} else {// si es aritmetico retorno el tipo de algun operando
 			expr.setType(typeLeft);
 			return typeLeft;
@@ -367,17 +367,17 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 
 	@Override
 	public GenericType visit(IntegerLiteral lit) {
-		return new GenericType(Type.INTEGER.toString());
+		return lit.getType();
 	}
 
 	@Override
 	public GenericType visit(BoolLiteral lit) {
-		return new GenericType(Type.BOOL.toString());
+		return lit.getType();
 	}
 
 	@Override
 	public GenericType visit(FloatLiteral lit) {
-		return new GenericType(Type.FLOAT.toString());
+		return lit.getType();
 	}
 
 	@Override
@@ -388,7 +388,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 
 	@Override
 	public GenericType visit(FieldDeclaration fd) {
-		return new GenericType(Type.VOID.toString());
+		return fd.getType();
 	}
 
 	@Override

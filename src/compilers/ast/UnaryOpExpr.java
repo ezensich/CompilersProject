@@ -1,5 +1,6 @@
 package compilers.ast;
 
+import compilers.ast.enumerated_types.GenericType;
 import compilers.ast.enumerated_types.UnaryOpType;
 import compilers.ASTVisitor;
 
@@ -22,6 +23,11 @@ public class UnaryOpExpr extends Expression{
     public Expression getExpression() {
         return expr;
     }
+    
+    @Override
+	public GenericType getType() {
+		return this.expr.getType();
+	}
 	
     @Override
     public <T> T accept(ASTVisitor<T> v) {

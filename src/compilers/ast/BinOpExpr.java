@@ -9,7 +9,6 @@ public class BinOpExpr extends Expression {
 	private BinOpType operator; // operator in the expr
 	private Expression lExpr; // left expression
 	private Expression rExpr; // right expression
-	private GenericType type;
 
 	public BinOpExpr(Expression l, BinOpType op, Expression r, int line, int col){
 		this.setColumnNumber(col);
@@ -29,14 +28,6 @@ public class BinOpExpr extends Expression {
 
 	public Expression getRightExpr() {
 		return rExpr;
-	}
-	
-	public GenericType getType(){
-		return this.type;
-	}
-
-	public void setType(GenericType genericType) {
-		this.type = genericType;
 	}
 
 	@Override

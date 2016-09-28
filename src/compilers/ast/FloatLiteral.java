@@ -8,6 +8,7 @@ public class FloatLiteral extends Literal {
 
 	private String stringValue;
 	private Float floatValue;
+	private GenericType type = new GenericType(Type.FLOAT.toString());
 	
 
 	public FloatLiteral(Float val, int line, int col){
@@ -19,7 +20,7 @@ public class FloatLiteral extends Literal {
 
 	@Override
 	public GenericType getType() {
-		return new GenericType(Type.FLOAT.toString());
+		return this.type;
 	}
 
 	public String getStringValue() {
