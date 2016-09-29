@@ -1,16 +1,17 @@
-package compilers;
+package compilers.lexical_syntactic_analysis;
 
 import java_cup.runtime.*;
 
 %%
 %class lexer
+%public
 %unicode
 %cup
 %line
 %column
 
 %{
-      StringBuffer string = new StringBuffer();
+	  StringBuffer string = new StringBuffer();
 
       private Symbol symbol(int type) {
         return new Symbol(type, yyline, yycolumn);
@@ -101,8 +102,8 @@ import java_cup.runtime.*;
 <YYINITIAL> {    
     /* assing operations */
     "="								{ return symbol(sym.ASSIGN, yytext());}
-	"=+"							{ return symbol(sym.INC, yytext());}
-	"=-"							{ return symbol(sym.DEC, yytext());}  
+	"+="							{ return symbol(sym.INC, yytext());}
+	"-="							{ return symbol(sym.DEC, yytext());}  
 }	  
 
 /* types */
@@ -111,8 +112,8 @@ import java_cup.runtime.*;
 /* literals */
 <YYINITIAL> { 	
 	
-	{int_literal}					{ return symbol(sym.INTEGER_LITERAL, yytext());}
-	{float_literal}					{ return symbol(sym.FLOAT_LITERAL, yytext());}
+	{int_literal}					{ return symbol(sym.INTEGER_LITERAL, Integer.parseInt(yytext()));}
+	{float_literal}					{ return symbol(sym.FLOAT_LITERAL, Float.parseFloat(yytext()));}
 }
 
 <YYINITIAL> { 	

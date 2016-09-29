@@ -1,6 +1,5 @@
 package compilers.semcheck;
 
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,23 +37,26 @@ import compilers.ast.UnaryOpExpr;
 import compilers.ast.WhileStmt;
 
 /*
- *   Esta clase es la encargada de hacer el chequeo semantico diferentes reglas provistas por
+ *   Esta clase es la encargada de hacer el chequeo semantico de diferentes reglas provistas por
  * la descripcion del lenguaje. Las reglas que valida son las siguientes:
  *   Regla 18: Las sentencias 'break' y 'continue' solo pueden encontrarse en el cuerpo de un
  * ciclo.
  */
 public class BreakContinueASTVisitor implements ASTVisitor<String> {
 
-	private List<String> errorList;
-	
+	private List<String> errorList; // Lista de errores encontrados
+
+	// Constructor
 	public BreakContinueASTVisitor() {
 		errorList = new LinkedList<>();
 	}
-	
-	public List<String> getErrorList(){
+
+	// Getters
+	public List<String> getErrorList() {
 		return this.errorList;
 	}
-	
+
+	// ASTVisitors methods implemented
 	@Override
 	public String visit(Program prog) {
 		String result = "";
@@ -76,7 +78,7 @@ public class BreakContinueASTVisitor implements ASTVisitor<String> {
 			for (Statement s : stmtList.getStatementList()) {
 				String g = s.accept(this);
 				if (g.equals("break") || g.equals("continue")) {
-					result += " "+g;
+					result += " " + g;
 				}
 			}
 		}
@@ -99,7 +101,7 @@ public class BreakContinueASTVisitor implements ASTVisitor<String> {
 		if (stmt.getElseStatement() != null) {
 			String g2 = stmt.getElseStatement().accept(this);
 			if (!g2.equals("")) {
-				g += " "+g2;
+				g += " " + g2;
 			}
 		}
 		return g;
@@ -217,7 +219,7 @@ public class BreakContinueASTVisitor implements ASTVisitor<String> {
 	@Override
 	public String visit(MethodDeclaration methD) {
 		return methD.getBody().accept(this);
-		
+
 	}
 
 	@Override
@@ -230,7 +232,7 @@ public class BreakContinueASTVisitor implements ASTVisitor<String> {
 					errorList.add("Error en el metodo " + m.getId() + ": La sentencia break"
 							+ " debe estar dentro de un ciclo.");
 				}
-				if(g.contains("continue")){
+				if (g.contains("continue")) {
 					errorList.add("Error en el metodo " + m.getId() + ": La sentencia continue"
 							+ " debe estar dentro de un ciclo.");
 				}

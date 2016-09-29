@@ -87,4 +87,13 @@ public class AttributeSymbolTable {
     }    
     
 
+
+    
+    @Override
+    public String toString(){
+    	String result = "( Tipo="+type.getType()+" Nombre="+name+""
+    			+ " Size="+size+" offset="+offset+" isGlonal="+isGlobal
+    			+ " value="+value.toString()+")";
+    	return result;
+    }
 }

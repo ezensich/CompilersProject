@@ -1,11 +1,8 @@
 // CUP specification for a simple expression evaluator (w/ actions)
-package compilers;
+package compilers.lexical_syntactic_analysis;
 
 import compilers.ast.enumerated_types.*;
 import compilers.ast.*;
-import compilers.data_structures.*;
-import java_cup.runtime.*;
-import java.util.List;
 
 parser code  {: 
 
@@ -57,7 +54,7 @@ terminal AND, OR;
 terminal ASSIGN, INC, DEC;
 
 /* literals */
-terminal String INTEGER_LITERAL;
+terminal Integer INTEGER_LITERAL;
 terminal Float FLOAT_LITERAL;
 
 /* Non-terminals */
@@ -101,7 +98,7 @@ precedence left + 1 ELSE;
 start with program;			
 		
 program ::= class_decl:c {: ast = new Program(c); :}
-		| class_decl:c program:p {: p.addDeclarationClass(c); RESULT = p; :}
+		| class_decl:c program {: ast.addDeclarationClass(c); RESULT = ast; :}
 		;
 
 class_decl ::= CLASS ID:i LKEY  RKEY {: RESULT = new DeclarationClass(new IdName(i),null,null); :}

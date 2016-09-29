@@ -56,4 +56,13 @@ public class BlockSymbolTable {
         }
         return exist;
     }
+    
+    @Override
+    public String toString(){
+    	String result = "";
+    	for(AttributeSymbolTable attr : listAttr){
+    		result += attr.toString()+'\n';
+    	}
+    	return result;
+    }
 }

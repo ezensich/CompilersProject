@@ -7,10 +7,9 @@ import compilers.ASTVisitor;
 
 public class Program extends AST {
 
-	private List<DeclarationClass> listDecClass;
+	private List<DeclarationClass> listDecClass = new LinkedList<>();
 
 	public Program(DeclarationClass decClass) {
-		this.listDecClass = new LinkedList<>();
 		this.listDecClass.add(decClass);
 	}
 

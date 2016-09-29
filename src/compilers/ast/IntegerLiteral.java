@@ -11,13 +11,13 @@ public class IntegerLiteral extends Literal {
 	private GenericType type = new GenericType(Type.INTEGER.toString());
 	
 
-	public IntegerLiteral(String val, int line, int col){
+	public IntegerLiteral(Integer val, int line, int col){
 		this.setColumnNumber(col);
 		this.setLineNumber(line);
-		stringValue = val; 
-		integerValue = Integer.parseInt(val);
+		stringValue = val.toString(); 
+		integerValue = val;
 	}
-
+	
 	@Override
 	public GenericType getType() {
 		return this.type;
