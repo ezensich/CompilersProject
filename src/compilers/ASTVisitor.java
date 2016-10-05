@@ -1,12 +1,12 @@
 package compilers;
 
 import compilers.ast.*;
+import compilers.int_code_gen.LabelExpr;
 
 public interface ASTVisitor<T> {
 
 	// visit program
 	T visit(Program prog);
-
 	T visit(DeclarationClass decClass);
 
 	// visit statements
@@ -72,4 +72,13 @@ public interface ASTVisitor<T> {
 
 	// visit method parameter
 	T visit(Parameter parameter);
+
+	//visit idName
+	T visit(IdName idName);
+
+	//visit generic type
+	T visit(GenericType genericType);
+	
+	//visit label
+	T visit(LabelExpr labelExpr);
 }

@@ -1,7 +1,8 @@
 package compilers.symbol_table;
 
+import compilers.ast.GenericType;
 import compilers.ast.Parameter;
-import compilers.ast.enumerated_types.GenericType;
+
 import java.util.List;
 /*
  * Method definition to create a symbol table.

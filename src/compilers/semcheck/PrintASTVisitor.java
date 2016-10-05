@@ -1,6 +1,7 @@
 package compilers.semcheck;
 
 import compilers.ast.*;
+import compilers.int_code_gen.LabelExpr;
 import compilers.ASTVisitor;
 
 public class PrintASTVisitor implements ASTVisitor<String> {
@@ -252,6 +253,22 @@ public class PrintASTVisitor implements ASTVisitor<String> {
 	@Override
 	public String visit(Parameter parameter) {
 		return parameter.getType().getType() + " " + parameter.getId().getId();
+	}
+
+	@Override
+	public String visit(IdName idName) {
+		return idName.getId();
+	}
+
+	@Override
+	public String visit(GenericType genericType) {
+		return genericType.getType();
+	}
+
+	@Override
+	public String visit(LabelExpr labelExpr) {
+		String result = labelExpr.getLabel()+labelExpr.getId();
+		return result;
 	}
 
 }

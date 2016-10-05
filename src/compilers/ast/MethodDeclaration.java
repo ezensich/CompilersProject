@@ -1,6 +1,5 @@
 package compilers.ast;
 
-import compilers.ast.enumerated_types.GenericType;
 import compilers.ASTVisitor;
 
 public class MethodDeclaration extends AST {

@@ -1,6 +1,5 @@
 package compilers.ast;
 
-import compilers.ast.enumerated_types.GenericType;
 import compilers.ASTVisitor;
 
 public class Parameter extends AST {
@@ -24,5 +23,6 @@ public class Parameter extends AST {
 	public <T> T accept(ASTVisitor<T> v) {
 		return v.visit(this);
 	}
+
 
 }

@@ -1,6 +1,8 @@
 package compilers.ast;
 
-public class IdName {
+import compilers.ASTVisitor;
+
+public class IdName extends AST{
 
 	private String id;
 	
@@ -19,6 +21,11 @@ public class IdName {
 	@Override
 	public String toString(){
 		return this.id;
+	}
+
+	@Override
+	public <T> T accept(ASTVisitor<T> v) {
+		return v.visit(this);
 	}
 	
 }

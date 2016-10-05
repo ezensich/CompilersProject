@@ -1,6 +1,5 @@
 package compilers.ast;
 
-import compilers.ast.enumerated_types.GenericType;
 import compilers.ast.enumerated_types.Type;
 import compilers.ASTVisitor;
 

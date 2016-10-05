@@ -1,6 +1,6 @@
 package compilers.symbol_table;
 
-import compilers.ast.enumerated_types.GenericType;
+import compilers.ast.GenericType;
 
 /*
  * Attribute definition to create a symbol table.

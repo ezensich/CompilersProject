@@ -4,21 +4,22 @@ import compilers.ASTVisitor;
 
 public class MethodCallStmt extends Statement{
 
-	private ExpressionList listExpr;
-    private IdName methodId;
+	private MethodCallExpr meth;
 
-	
 	public MethodCallStmt(Expression expr){
-		this.listExpr = ((MethodCallExpr) expr).getExpressionList();
-		this.methodId = ((MethodCallExpr) expr).getIdName();
+		this.meth = (MethodCallExpr) expr;
 	}
 	
 	public IdName getIdName(){
-		return this.methodId;
+		return this.meth.getIdName();
 	}
 	
 	public ExpressionList getExpressionList(){
-		return this.listExpr;
+		return this.meth.getExpressionList();
+	}
+
+	public MethodCallExpr getMethodCallExpr(){
+		return this.meth;
 	}
 	
 	@Override

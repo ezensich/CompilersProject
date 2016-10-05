@@ -1,15 +1,17 @@
 package compilers.int_code_gen;
 
+import compilers.ast.AST;
 import compilers.ast.Expression;
+import compilers.semcheck.PrintASTVisitor;
 
 public class ICGInstruction {
 
 	private ICGOperation op;
-	private Expression p1;
-	private Expression p2;
-	private Expression p3;
+	private AST p1;
+	private AST p2;
+	private AST p3;
 
-	public ICGInstruction(ICGOperation op, Expression p1, Expression p2, Expression p3) {
+	public ICGInstruction(ICGOperation op, AST p1, AST p2, AST p3) {
 		this.op = op;
 		this.p1 = p1;
 		this.p2 = p2;
@@ -20,15 +22,15 @@ public class ICGInstruction {
 		return this.op;
 	}
 
-	public Object getP1() {
+	public AST getP1() {
 		return this.p1;
 	}
 
-	public Object getP2() {
+	public AST getP2() {
 		return this.p2;
 	}
 
-	public Object getP3() {
+	public AST getP3() {
 		return this.p3;
 	}
 
@@ -36,15 +38,21 @@ public class ICGInstruction {
 	public String toString() {
 		String res = op.toString();
 		if (p1 != null) {
-			res = res.concat(" " + p1.toString());
-			if (p2 != null) {
-				res = res.concat(" " + p2.toString());
-				if (p3 != null) {
-					res = res.concat(" " + p3.toString());
-				}
-			}
+			res += " " + (p1.accept(new PrintASTVisitor()));
+		} else {
+			res += " -";
 		}
-		return res;
+		if (p2 != null) {
+			res += " " + (p2.accept(new PrintASTVisitor()));
+		} else {
+			res += " -";
+		}
+		if (p3 != null) {
+			res += " " + (p3.accept(new PrintASTVisitor()));
+		} else {
+			res += " -";
+		}
+		return "[ " + res + " ]";
 	}
 
 }

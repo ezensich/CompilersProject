@@ -13,12 +13,20 @@ public class ExpressionList extends Expression {
 		this.addExpressionToList(e);
 	}
 	
+	public ExpressionList(List<Expression> exprList){
+		this.listExpression = exprList;
+	}
+	
 	public void addExpressionToList(Expression expr){
 		listExpression.add(expr);
 	}
 	
 	public List<Expression> getExpressionList(){
 		return listExpression;
+	}
+
+	public void setExpressionList(List<Expression> list) {
+		this.listExpression = list;
 	}
 	
 	@Override

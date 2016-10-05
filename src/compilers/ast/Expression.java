@@ -1,8 +1,5 @@
 package compilers.ast;
 
-
-import compilers.ast.enumerated_types.GenericType;
-
 public abstract class Expression extends AST{
 
 	protected GenericType type;

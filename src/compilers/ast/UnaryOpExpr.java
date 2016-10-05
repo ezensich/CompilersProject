@@ -1,6 +1,5 @@
 package compilers.ast;
 
-import compilers.ast.enumerated_types.GenericType;
 import compilers.ast.enumerated_types.UnaryOpType;
 import compilers.ASTVisitor;
 

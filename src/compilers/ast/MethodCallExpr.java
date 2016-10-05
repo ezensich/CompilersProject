@@ -24,6 +24,10 @@ public class MethodCallExpr extends Expression {
 	public ExpressionList getExpressionList() {
 		return this.listExpr;
 	}
+	
+	public void setExpressionList(ExpressionList exprList){
+		this.listExpr = exprList;
+	}
 
 	public IdName getIdName() {
 		return methodId;

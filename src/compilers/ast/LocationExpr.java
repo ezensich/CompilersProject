@@ -1,12 +1,16 @@
 package compilers.ast;
 
 import compilers.ASTVisitor;
-import compilers.ast.enumerated_types.GenericType;
 
 public class LocationExpr extends Expression{
 
 	private IdName id;
 	private Expression expr;
+	
+	public LocationExpr(IdName i){
+		this.id = i;
+		this.expr = null;
+	}
 	
 	public LocationExpr(IdName i, Expression e, int line, int col){
 		this.setColumnNumber(col);
@@ -32,14 +36,17 @@ public class LocationExpr extends Expression{
 	
 	@Override
 	public GenericType getType() {
-		return this.expr.getType();
+		return super.getType();
+	}
+	
+	public void setExpr(Expression expr) {
+		this.expr = expr;
 	}
 	
 	@Override
     public <T> T accept(ASTVisitor<T> v) {
         return v.visit(this);
     }
-	
 	
 	
 }

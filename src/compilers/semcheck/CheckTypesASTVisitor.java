@@ -5,9 +5,9 @@ import java.util.List;
 
 import compilers.ast.*;
 import compilers.ast.enumerated_types.BinOpType;
-import compilers.ast.enumerated_types.GenericType;
 import compilers.ast.enumerated_types.Type;
 import compilers.ast.enumerated_types.UnaryOpType;
+import compilers.int_code_gen.LabelExpr;
 import compilers.ASTVisitor;
 import compilers.symbol_table.*;
 
@@ -532,5 +532,23 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 		// La lista de identificadores, de por si solos, no tienen tipo
 		return null;
 	}// fin visit IdentifierList
+
+	@Override
+	public GenericType visit(IdName idName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GenericType visit(GenericType genericType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GenericType visit(LabelExpr labelExpr) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

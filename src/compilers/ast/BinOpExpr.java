@@ -1,7 +1,6 @@
 package compilers.ast;
 
 import compilers.ast.enumerated_types.BinOpType;
-import compilers.ast.enumerated_types.GenericType;
 import compilers.ASTVisitor;
 
 public class BinOpExpr extends Expression {

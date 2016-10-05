@@ -1,6 +1,5 @@
 package compilers.ast;
 
-import compilers.ast.enumerated_types.GenericType;
 import compilers.ast.enumerated_types.Type;
 import compilers.ASTVisitor;
 
@@ -10,7 +9,11 @@ public class IntegerLiteral extends Literal {
 	private Integer integerValue;
 	private GenericType type = new GenericType(Type.INTEGER.toString());
 	
-
+	public IntegerLiteral(Integer val){
+		this.integerValue = val;
+		this.stringValue = val.toString();
+	}
+	
 	public IntegerLiteral(Integer val, int line, int col){
 		this.setColumnNumber(col);
 		this.setLineNumber(line);

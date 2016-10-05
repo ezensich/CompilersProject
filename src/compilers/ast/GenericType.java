@@ -1,6 +1,8 @@
-package  compilers.ast.enumerated_types;
+package  compilers.ast;
 
-public class GenericType {
+import compilers.ASTVisitor;
+
+public class GenericType extends AST{
 
 	private String type;
 	
@@ -31,5 +33,10 @@ public class GenericType {
 	
 	public boolean isVoid(){
 		return this.type == "void";
+	}
+
+	@Override
+	public <T> T accept(ASTVisitor<T> v) {
+		return v.visit(this);
 	}
 }

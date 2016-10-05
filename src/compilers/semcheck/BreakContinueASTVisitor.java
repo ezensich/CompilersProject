@@ -18,6 +18,8 @@ import compilers.ast.FieldDeclaration;
 import compilers.ast.FieldDeclarationList;
 import compilers.ast.FloatLiteral;
 import compilers.ast.ForStmt;
+import compilers.ast.GenericType;
+import compilers.ast.IdName;
 import compilers.ast.Identifier;
 import compilers.ast.IdentifiersList;
 import compilers.ast.IfStmt;
@@ -35,6 +37,7 @@ import compilers.ast.Statement;
 import compilers.ast.StatementList;
 import compilers.ast.UnaryOpExpr;
 import compilers.ast.WhileStmt;
+import compilers.int_code_gen.LabelExpr;
 
 /*
  *   Esta clase es la encargada de hacer el chequeo semantico de diferentes reglas provistas por
@@ -245,6 +248,24 @@ public class BreakContinueASTVisitor implements ASTVisitor<String> {
 	@Override
 	public String visit(Parameter parameter) {
 		return "";
+	}
+
+	@Override
+	public String visit(IdName idName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String visit(GenericType genericType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String visit(LabelExpr labelExpr) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
