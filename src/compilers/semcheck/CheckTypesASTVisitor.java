@@ -4,9 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import compilers.ast.*;
-import compilers.ast.enumerated_types.BinOpType;
-import compilers.ast.enumerated_types.Type;
-import compilers.ast.enumerated_types.UnaryOpType;
+import compilers.ast.enumerated_types.*;
 import compilers.int_code_gen.LabelExpr;
 import compilers.ASTVisitor;
 import compilers.symbol_table.*;
@@ -14,25 +12,8 @@ import compilers.symbol_table.*;
 /*
  *   Esta clase es la encargada de hacer el chequeo semantico de diferentes reglas provistas por
  * la descripcion del lenguaje. Las reglas que valida son las siguientes:
- *   Regla 1: Ningun identificador es declarado dos veces en el mismo bloque. Este metodo no tiene parametros.
- *   Regla 2: Ningun identificador es usado antes de ser declarado.
- *   Regla 3: Toda programa contiene la definicion de una clase y un metodo en la misma clase llamado "main".
- *   Regla 4: El (int_literal) en la declaracion de un arreglo debe ser mayor a 0.
- *   Regla 5: La cantidad y tipo de los argumentos en una invocacion a un metodo, debe ser igual a la cantidad
- * y tipo de argumentos en la definicion del metodo.
- *   Regla 7: Una sentencia return solo tiene asociada una expresion si el metodo retorna un valor distinto de "VOID".
- *   Regla 8: La expresion en una sentencia "return" debe ser igual al tipo de retorno declarado para el 
- * metodo.
- *   Regla 9: un id debe estar declarado como un parametro o como variable local o global.
- *   Regla 10: En la declaracion de arreglos "id[exp]", "id" debe ser una variable de arreglo(array), y el tipo de
- * "exp" debe ser Integer.
- *   Regla 11: La expresion en una sentencia "if" o "while" debe ser Boolean.
- *   Regla 12: Los operandos aritmeticos y relacionales deben ser Float o Integer.
- *   Regla 13: Los operandos de igualdad deben ser del mismo tipo.
- *   Regla 14: Los operandos condicionales y negacion deben ser de tipo Boolean.
- *   Regla 15: La "location" y "expresion" en una asignacion deben ser del mismo tipo.
- *   Regla 16: La "location" y "expresion" en las asignaciones +=, -= deben ser de tipo Float o Integer.
- *   Regla 17: Las expresiones iniciales y finales de un "for" deben ser de tipo Integer.
+ *   
+ *   Reglas 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 y 17.
  *   
  */
 public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
@@ -66,20 +47,15 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 				dc.accept(this);
 			}
 			// Chequeo que exista una clase "Main"
-			if (symbolTable.existClassSymbolTable("Main")) {
+			if (symbolTable.existClassSymbolTable("main")) {
 				// Busco el metodo "main" dentro de la clase "Main"
-				MethodSymbolTable meth = symbolTable.getMethodSymbolTable("Main", "main");
+				MethodSymbolTable meth = symbolTable.getMethodSymbolTable("main", "main");
 				if (meth == null) {// Si no existe el metodo "main"
 					errorList.add("error. La clase debe contener un metodo main");
 				}
 				// la lista de parametros de "main" debe ser vacia
 				if (!meth.getParameterList().isEmpty()) {
 					errorList.add("error. El metodo main no debe contener parametros");
-				} else {
-					// el metodo debe tener retorno de tipo "void"
-					if (!meth.getReturnType().isVoid()) {
-						errorList.add("error. el metodo main debe retornar void");
-					}
 				}
 			} else {// Si no existe la clase "Main"
 				errorList.add("El programa debe contener una clase main");
@@ -114,7 +90,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 		// retorno(debe ser "void")
 		GenericType lastType = new GenericType(Type.VOID.toString());
 		for (Statement s : stmtList.getStatementList()) {
-			if (!lastType.getType().equals((Type.VOID.toString()))) {
+			if (lastType != null && !lastType.getType().equals((Type.VOID.toString()))) {
 				errorList.add("No se puede tener sentencias despues de un return");
 			}
 			lastType = s.accept(this);
@@ -232,7 +208,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 
 	@Override
 	public GenericType visit(MethodCallStmt methStmt) {
-		return new GenericType(Type.VOID.toString());
+		return methStmt.getMethodCallExpr().accept(this);
 	}// fin visit MethodCallStmt
 
 	@Override
@@ -252,7 +228,8 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 		if (body.getBlock() != null) {
 			return body.getBlock().accept(this);
 		} else {
-			return null;
+			//si es extern retorno tipo 'VOID'
+			return new GenericType(Type.VOID.toString());
 		}
 	}// fin visit Body
 
@@ -316,10 +293,10 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 	@Override
 	public GenericType visit(LocationExpr locExpr) {
 		// Busco la variable declarada en la tabla de simbolos
-		AttributeSymbolTable var = symbolTable.getAttributeSymbolTable(locExpr.getId().getId());
+		AttributeSymbolTable var = (AttributeSymbolTable) locExpr.getReference();
 		// si la variable no existe
 		if (var == null) {
-			errorList.add("variable '" + locExpr.getId().getId() + "' no definida, linea: " + locExpr.getLineNumber()
+			errorList.add("variable '" + locExpr.getId().getId() + "' no definida local ni globalmente, linea: " + locExpr.getLineNumber()
 					+ " columna: " + locExpr.getColumnNumber());
 			return null;
 		} else {
@@ -394,8 +371,9 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 	@Override
 	public GenericType visit(MethodCallExpr methExpr) {
 		// saco el metodo de la tabla de simbolos
-		MethodSymbolTable methSymbolTable = symbolTable.getMethodSymbolTable(symbolTable.getLastClass(),
-				methExpr.getIdName().toString());
+		MethodSymbolTable methSymbolTable = (MethodSymbolTable) methExpr.getReference();
+		
+		if(methSymbolTable != null){
 		// si la cantidad de parametros del metodo en la declaracion es
 		// distinta a la cantidad en la invocacion
 		if (methSymbolTable.getParameterList() != null && methExpr.getExpressionList() != null
@@ -416,7 +394,15 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 				}
 			}
 		}
+		}else{
+			// si es null no esta declarado ni en esta clase ni en ninguna otra, hay un error
+			errorList.add("Error, el metodo " + methExpr.getIdName().getId() + " no fue declarado en ninguna clase, linea: "
+					+ methExpr.getLineNumber());
+			return null;
+		}
+
 		return methSymbolTable.getReturnType();
+
 	}// fin visit MethodCallExpression
 
 	@Override
@@ -463,7 +449,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 					symbolTable.setVarBlockSymbolTable(attr);
 					// Agrego el atributo a la clase tope en la tabla de
 					// simbolos
-					symbolTable.insertAttrClassSymbolTable(symbolTable.getLastClass(), attr);
+					symbolTable.insertAttrClassSymbolTable(symbolTable.getLastClassName(), attr);
 				}
 			}
 		return null;
@@ -507,7 +493,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 				// Creo un nuevo metodo con los datos del metodo actual
 				MethodSymbolTable methST = new MethodSymbolTable(m.getId().getId(), m.getType(), listParameter);
 				// Agrego el metodo en la clase al tope de la pila
-				symbolTable.insertMethClassSymbolTable(symbolTable.getLastClass(), methST);
+				symbolTable.insertMethClassSymbolTable(symbolTable.getLastClassName(), methST);
 			}
 		}
 		return null;

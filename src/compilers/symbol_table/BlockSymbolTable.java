@@ -9,11 +9,16 @@ import java.util.List;
 public class BlockSymbolTable {
 
     private List<AttributeSymbolTable> listAttr;
+    private List<String> errorList;
 
     public BlockSymbolTable() {
+    	this.errorList = new LinkedList<>();
         this.listAttr = new LinkedList<>();
     }
 
+    public List<String> getErrorList(){
+    	return this.errorList;
+    }
     public BlockSymbolTable(List<AttributeSymbolTable> listAttr) {
         this.listAttr = listAttr;
     }
@@ -39,8 +44,8 @@ public class BlockSymbolTable {
 
     public void setAttributeSymbolTable(AttributeSymbolTable attr) {
         if (existAttributeSymbolTable(attr)) {
-            System.out.println("error, ya existe la variable '" + attr.getName() + "'");
-            System.exit(1);
+             errorList.add("error, ya existe la variable '" + attr.getName() + "'");
+             
         }
         this.listAttr.add(attr);
     }

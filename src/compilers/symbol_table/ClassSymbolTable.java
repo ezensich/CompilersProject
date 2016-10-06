@@ -9,12 +9,19 @@ import java.util.List;
 public class ClassSymbolTable {
 	private List<AttributeSymbolTable> listAttr;
     private List<MethodSymbolTable> listMeth;
-
+    private List<String> errorList;
+   
     public ClassSymbolTable() {
+    	this.errorList = new LinkedList<>();
         this.listAttr = new LinkedList<>();
         this.listMeth = new LinkedList<>();
     }
-
+    
+    public List<String> getErrorList(){
+    	return this.errorList;
+    }
+    
+    
     public ClassSymbolTable(List<AttributeSymbolTable> attrs, List<MethodSymbolTable> meths) {
         this.listAttr = attrs;
         this.listMeth = meths;
@@ -38,8 +45,8 @@ public class ClassSymbolTable {
 
     public void setAttributeSymbolTable(AttributeSymbolTable attr) {
         if (existAttributeSymbolTable(attr)) {
-            System.out.println("error, ya existe el AttributeSymbolTable '" + attr.getName() + "'");
-            System.exit(1);
+             errorList.add("error, ya existe el AttributeSymbolTable '" + attr.getName() + "'");
+             
         }
         this.listAttr.add(attr);
     }
@@ -82,8 +89,8 @@ public class ClassSymbolTable {
 
     public void setMethodSymbolTable(MethodSymbolTable meth) {
         if (existMethodSymbolTable(meth)) {
-            System.out.println("error, ya existe el MethodSymbolTable '" + meth.getName() + "'");
-            System.exit(1);
+             errorList.add("error, ya existe el MethodSymbolTable '" + meth.getName() + "'");
+             
         }
         this.listMeth.add(meth);
     }

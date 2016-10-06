@@ -13,17 +13,29 @@ public class SymbolTable {
 	private Map<String, ClassSymbolTable> mapClass;
     private LinkedList<BlockSymbolTable> stackBlock;
     private String lastClass;
+    private List<String> errorList;
+    
 
     public SymbolTable() {
+    	errorList = new LinkedList<>();
         mapClass = new HashMap<>();
         stackBlock = new LinkedList<BlockSymbolTable>();
         lastClass = "";
     }
 
+    public List<String> getErrorList(){
+    	for(ClassSymbolTable c : mapClass.values()){
+    		this.errorList.addAll(c.getErrorList());
+    	}
+    	for(BlockSymbolTable b : stackBlock){
+    		this.errorList.addAll(b.getErrorList());
+    	}
+    	return this.errorList;
+    }
+    
     public void pushClassSymbolTable(String name, ClassSymbolTable classSymbolTable) {
         if (mapClass.containsKey(name)) {
-            System.err.println("ya existe la ClassSymbolTable '" + name + "'");
-            System.exit(1);
+            errorList.add("ya existe la ClassSymbolTable '" + name + "'");
         }
         mapClass.put(name, classSymbolTable);
         lastClass = name;
@@ -48,8 +60,8 @@ public class SymbolTable {
             c.setAttributeSymbolTable(attr);
             mapClass.replace(nameClassSymbolTable, c);
         } else {
-            System.out.println("error, no existe la ClassSymbolTable '" + nameClassSymbolTable + "'");
-            System.exit(1);
+            errorList.add("error, no existe la ClassSymbolTable '" + nameClassSymbolTable + "'");
+             
         }
     }
 
@@ -64,8 +76,8 @@ public class SymbolTable {
             c.setMethodSymbolTable(meth);
             mapClass.replace(nameClassSymbolTable, c);
         } else {
-            System.out.println("error, no existe la ClassSymbolTable '" + nameClassSymbolTable + "'");
-            System.exit(1);
+            errorList.add("error, no existe la ClassSymbolTable '" + nameClassSymbolTable + "'");
+             
         }
     }
 
@@ -117,9 +129,13 @@ public class SymbolTable {
         return stackBlock.size() == 0;
     }
 
-    public String getLastClass() {
+    public String getLastClassName() {
         return lastClass;
     }
+    
+    public ClassSymbolTable getLastClass(){
+    	return mapClass.get(lastClass);
+    } 
 
     public AttributeSymbolTable getVariableBlockSymbolTable(String id) {
         for (int i = stackBlock.size()-1; i>0; i--) {//arranco de de 1 para evitar rev

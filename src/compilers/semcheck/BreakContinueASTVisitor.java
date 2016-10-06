@@ -42,8 +42,9 @@ import compilers.int_code_gen.LabelExpr;
 /*
  *   Esta clase es la encargada de hacer el chequeo semantico de diferentes reglas provistas por
  * la descripcion del lenguaje. Las reglas que valida son las siguientes:
- *   Regla 18: Las sentencias 'break' y 'continue' solo pueden encontrarse en el cuerpo de un
- * ciclo.
+ * 
+ *   Regla 18.
+ *   
  */
 public class BreakContinueASTVisitor implements ASTVisitor<String> {
 

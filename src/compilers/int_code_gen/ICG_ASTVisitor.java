@@ -20,7 +20,7 @@ public class ICG_ASTVisitor implements ASTVisitor<Expression> {
 	private int instrId;
 	// identificador para labels
 	private int labelId;
-	// pila de labels de ciclos
+	// pila de labels para ciclos
 	private Stack<Pair<Integer, Integer>> iterLabels;
 
 	// constructor
@@ -399,7 +399,7 @@ public class ICG_ASTVisitor implements ASTVisitor<Expression> {
 
 			// arreglar despues de setear las referencias
 
-			// ((MethodSymbolTable) methD.getReference()).setIsExtern(true);
+			((MethodSymbolTable) methD.getReference()).setIsExtern(true);
 
 		}
 		return null;

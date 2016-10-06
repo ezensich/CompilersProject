@@ -98,7 +98,7 @@ precedence left + 1 ELSE;
 start with program;			
 		
 program ::= class_decl:c {: ast = new Program(c); :}
-		| class_decl:c program {: ast.addDeclarationClass(c); RESULT = ast; :}
+		| program class_decl:c {: ast.addDeclarationClass(c); RESULT = ast; :}
 		;
 
 class_decl ::= CLASS ID:i LKEY  RKEY {: RESULT = new DeclarationClass(new IdName(i),null,null); :}

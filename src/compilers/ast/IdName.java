@@ -1,26 +1,38 @@
 package compilers.ast;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import compilers.ASTVisitor;
 
 public class IdName extends AST{
 
-	private String id;
+	List<String> idList;
 	
 	public IdName(String id){
-		this.id = id;
+		this.idList = new LinkedList<>();
+		this.idList.add(id);
 	}
 	
 	public String getId(){
-		return this.id;
+		return this.toString();
+	}
+	
+	public List<String> getIdList(){
+		return this.idList;
 	}
 	
 	public void extendId(String newId){
-		this.id = this.id +"."+ newId;
+		this.idList.add(newId);
 	}
 	
 	@Override
 	public String toString(){
-		return this.id;
+		String result = this.idList.get(0);
+		for(int i = 1; i<idList.size();i++){
+			result+= "."+this.idList.get(i); 
+		}
+		return result;
 	}
 
 	@Override
