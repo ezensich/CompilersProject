@@ -39,7 +39,10 @@ public class ICG_ASTVisitor implements ASTVisitor<Expression> {
 	@Override
 	public Expression visit(Program prog) {
 		for (DeclarationClass dc : prog.getListDeclarationClass()) {
+			instructionCodeList.add(new ICGInstruction(ICGOperation.CLASS, dc.getIdName(), null, null));
 			dc.accept(this);
+			int lbl = ++labelId;
+			instructionCodeList.add(new ICGInstruction(ICGOperation.LABEL, (new LabelExpr(lbl, "EndClass."+dc.getIdName().getId()+".")), null,null));
 		}
 		return null;
 	}
@@ -383,6 +386,7 @@ public class ICG_ASTVisitor implements ASTVisitor<Expression> {
 
 	@Override
 	public Expression visit(MethodDeclaration methD) {
+		instructionCodeList.add(new ICGInstruction(ICGOperation.FUNCTION,methD.getId(), methD.getArguments(), methD.getType()));
 		if (methD.getArguments() != null && methD.getArguments().getArgumentsList() != null) {
 			for (Parameter p : methD.getArguments().getArgumentsList()) {
 				p.accept(this);
@@ -402,6 +406,8 @@ public class ICG_ASTVisitor implements ASTVisitor<Expression> {
 			((MethodSymbolTable) methD.getReference()).setIsExtern(true);
 
 		}
+		int lbl = ++labelId;
+		instructionCodeList.add(new ICGInstruction(ICGOperation.LABEL, (new LabelExpr(lbl, "EndMethod."+methD.getId().getId()+".")), null,null));
 		return null;
 	}
 
