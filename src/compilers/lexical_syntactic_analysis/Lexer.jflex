@@ -38,7 +38,7 @@ import java_cup.runtime.*;
     alpha = [a-z] | [A-Z]
     digit = [0-9]
     int_literal = {digit}+
-    float_literal = {digit}+ . {digit}+
+    float_literal = {digit}+"."{digit}+
     id = {alpha} | {alpha} {alpha_num}+
     alpha_num = {alpha} | {digit} | _
     

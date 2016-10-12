@@ -6,6 +6,7 @@ public enum Type {
 	VOID,
 	BOOL;
 	
+	@Override
 	public String toString() {
 		switch(this) {
 			case INTEGER:

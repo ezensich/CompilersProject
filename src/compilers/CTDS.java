@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+
+import javax.sound.midi.SysexMessage;
 
 import compilers.lexical_syntactic_analysis.*;
 import compilers.ast.Program;
@@ -25,14 +28,20 @@ public class CTDS {
 
 		if (argv.length != 0) {
 			String current = new java.io.File(".").getCanonicalPath();
+			String pathFolderICG = current+"/icg";
+			String extensionICG = ".icg";
+			String canonicalFilePath;
 			String filePath;
 
+			CTDS.removeAllFiles(new File(pathFolderICG));
+			
 			for (int i = 0; i < argv.length; i++) {
 				try {
-					filePath = current + "/" + argv[i];
-					BufferedReader buffer = new BufferedReader(new FileReader(filePath));
+					filePath =  "/" + argv[i];
+					canonicalFilePath = current + filePath;
+					BufferedReader buffer = new BufferedReader(new FileReader(canonicalFilePath));
 					System.out.println("---------------------------------------------------------------------");
-					System.out.println("Compiling " + filePath);
+					System.out.println("Compiling " + canonicalFilePath);
 
 					// ------------------------------------------------------------------------
 					// Chequeo Sintactico
@@ -78,11 +87,11 @@ public class CTDS {
 					// Generador de codigo intermedio
 					ICG_ASTVisitor icgV = new ICG_ASTVisitor();
 					icgV.visit(prog);
-					System.out.println("\n ----- CODIGO INTERMEDIO GENERADO -----");
-					for (ICGInstruction inst : icgV.getInstructionCodeList()) {
-						System.out.println(inst.toString());
+					List<String> codeList = new LinkedList<>();
+					for(ICGInstruction inst : icgV.getInstructionCodeList()){
+						codeList.add(inst.toString());
 					}
-					System.out.println();
+					CTDS.writeFile(codeList, pathFolderICG, CTDS.getFileNameFromPath(filePath), extensionICG);
 					
 					// -----------------------------------------------------------------------------------------
 
@@ -96,15 +105,55 @@ public class CTDS {
 			System.out.println("No file selected");
 		}
 	}
-
+	/**
+	 * 
+	 * @param code Lista de instrucciones a guardar en el archivo
+	 * @param folder Direccion de la carpeta donde se guardara el archivo
+	 * @param filename Nombre del archivo a crear
+	 * @param extensionFile Extension del archivo a crear
+	 * @throws IOException
+	 */
 	private static void writeFile(List<String> code, String folder, String fileName, String extensionFile)
 			throws IOException {
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(folder + fileName + extensionFile)));
-		for (String instr : code) {
-			out.write(instr);
-			out.write("\n");
+		//Creo la carpeta donde voy a guardar el archivo
+		File f = new File(folder);
+		f.mkdirs();
+		//Creo el archivo
+		File file = new File(f,fileName+extensionFile);
+		file.createNewFile();
+		 //Creo un objeto para escribir caracteres en el archivo
+        FileWriter fw = new FileWriter(file);
+        for (String instr : code) {
+			fw.write(instr);
+			fw.write("\n");
 		}
-		out.close();
+        fw.close();
+        
+	}
+	
+	private static String getFileNameFromPath(String path){
+		//saco el nombre de un archivo desde su ruta
+		return path.substring(path.lastIndexOf("/")+1, path.lastIndexOf("."));
+	}
+	
+	private static boolean removeAllFiles(File path) throws IOException{
+		//elimino todo el contenido dentro de una carpeta
+		if (path.exists()) {
+			if (path.exists()) {
+		        File[] files = path.listFiles();
+		        for (int i = 0; i < files.length; i++) {
+		            if (files[i].isDirectory()) {
+		                removeAllFiles(files[i]);
+		            } else {
+		                files[i].delete();
+		            }
+		        }
+		    }
+	        return (path.delete());
+		} else {
+			System.err.println("El path "+path+" no es un directorio valido.");
+			return false;
+		}
 	}
 
 }
