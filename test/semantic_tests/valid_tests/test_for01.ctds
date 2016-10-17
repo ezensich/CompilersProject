@@ -22,7 +22,7 @@ void printf(integer f)extern;
 
 integer main(){
 
-    printf(pruArreglos(4.8));
+    printf(pruArreglos(4,8));
     
     return 1;
     

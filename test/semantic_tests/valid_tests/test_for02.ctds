@@ -20,7 +20,7 @@ void printf(integer i)extern;
 
 integer main(){
 
-    printf(pruArreglos(4.8 ));
+    printf(pruArreglos(4,8));
     
     return 1;
     

@@ -28,7 +28,7 @@ integer printI(integer i)extern;
 
 integer main(){
 
-    printI(pruArreglos(4.8 ));
+    printI(pruArreglos(4,8 ));
     
     return 1;
     
