@@ -1,6 +1,7 @@
 package  compilers.ast;
 
 import compilers.ASTVisitor;
+import compilers.ast.enumerated_types.Type;
 
 public class GenericType extends AST{
 
@@ -20,19 +21,19 @@ public class GenericType extends AST{
 	}
 	
 	public boolean isBool(){
-		return this.type == "bool";
+		return this.type.equals(Type.BOOL.toString());
 	}
 	
 	public boolean isFloat(){
-		return this.type == "float";
+		return this.type.equals(Type.FLOAT.toString());
 	}
 	
 	public boolean isInteger(){
-		return this.type == "integer";
+		return this.type.equals(Type.INTEGER.toString());
 	}
 	
 	public boolean isVoid(){
-		return this.type == "void";
+		return this.type.equals(Type.VOID.toString());
 	}
 
 	@Override

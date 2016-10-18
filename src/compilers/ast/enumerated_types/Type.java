@@ -14,7 +14,7 @@ public enum Type {
 			case VOID:
 				return "void";
 			case BOOL:
-				return "bool";
+				return "boolean";
 			case FLOAT:
 				return "float";
 		}

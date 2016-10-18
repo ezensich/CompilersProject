@@ -125,7 +125,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 			GenericType typeStmt = stmt.getExpression().accept(this);
 			// si la variable no tiene el mismo tipo que la expresion
 			// que se le asigna
-			if (loc.getType().toString() != typeStmt.toString()) {
+			if (!loc.getType().getType().equals(typeStmt.getType())) {
 				errorList.add("error de tipos, linea: " + stmt.getExpression().getLineNumber() + " columna: "
 						+ stmt.getExpression().getColumnNumber());
 			}

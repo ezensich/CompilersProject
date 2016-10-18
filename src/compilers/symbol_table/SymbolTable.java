@@ -24,6 +24,7 @@ public class SymbolTable {
     }
 
     public List<String> getErrorList(){
+    	this.errorList = new LinkedList<>();
     	for(ClassSymbolTable c : mapClass.values()){
     		this.errorList.addAll(c.getErrorList());
     	}

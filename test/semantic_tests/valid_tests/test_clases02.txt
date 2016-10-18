@@ -38,6 +38,8 @@ class persona{
 
 class main{
 
+	float c;
+
    void printI(integer i)extern;
 
  
