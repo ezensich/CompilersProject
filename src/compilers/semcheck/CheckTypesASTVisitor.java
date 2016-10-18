@@ -89,13 +89,30 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 		// Defino este tipo para retornarlo en caso de que no tenga tipo de
 		// retorno(debe ser "void")
 		GenericType lastType = new GenericType(Type.VOID.toString());
-		for (Statement s : stmtList.getStatementList()) {
-			if (lastType != null && !lastType.getType().equals((Type.VOID.toString()))) {
-				errorList.add("No se puede tener sentencias despues de un return");
-			}
-			lastType = s.accept(this);
+		if(stmtList != null && stmtList.getStatementList().isEmpty()){
+			return lastType;
 		}
-		return lastType;
+		else {
+			//saco el primer tipo return para compararlo con el resto
+			//todos los tipos de retorno deben ser iguales
+			for(Statement s : stmtList.getStatementList()){
+				lastType = s.accept(this);
+				if(s.isReturnStmt()){
+					break;//termino el ciclo porque encontre el primer return
+				}
+			}
+			for (Statement s : stmtList.getStatementList()) {
+				GenericType actualType = s.accept(this);
+				//si el stmt actual es un return
+				if(s.isReturnStmt()){
+					//si no coinciden los tipos de los return
+					if(!lastType.getType().equals(actualType.getType())){
+						errorList.add("Error de tipo de retorno. Las sentencias 'return' no coinciden en sus tipos.");
+					}
+				}
+			}
+			return lastType;
+		}
 	}// fin visit StatementList
 
 	@Override
@@ -136,6 +153,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 
 	@Override
 	public GenericType visit(ReturnStmt stmt) {
+		stmt.setReturnStmtTrue();//seteo que el stmt es de tipo return
 		if (stmt.getExpression() != null) {
 			return stmt.getExpression().accept(this);
 		} else {
@@ -145,17 +163,22 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 
 	@Override
 	public GenericType visit(IfStmt stmt) {
+		GenericType typeIf = new GenericType(Type.VOID.toString());
+		GenericType typeElse = new GenericType(Type.VOID.toString());
 		// chequeo que la condicion del if sea booleana
 		if (!stmt.getCondition().accept(this).isBool()) {
 			errorList.add("Condicion del if no es booleana, linea: " + stmt.getCondition().getLineNumber()
 					+ " columna: " + stmt.getCondition().getColumnNumber());
 		} else {
-			stmt.getIfStatement().accept(this);
+			typeIf = stmt.getIfStatement().accept(this);
 			if (stmt.getElseStatement() != null) {
-				stmt.getElseStatement().accept(this);
+				typeElse = stmt.getElseStatement().accept(this);
+				if(!typeElse.getType().equals(typeIf.getType())){
+					errorList.add("Error de tipo de retorno. Las sentencias 'return' no coinciden en sus tipos.");
+				}
 			}
 		}
-		return new GenericType(Type.VOID.toString());
+		return typeIf;
 	}// fin visit IfStmt
 
 	@Override
@@ -469,7 +492,7 @@ public class CheckTypesASTVisitor implements ASTVisitor<GenericType> {
 		if (ret != null) {
 			// si el tipo del metodo no es igual al tipo que está retornando
 			if (!methD.getType().getType().equals(ret.getType())) {
-				errorList.add("Error de tipo, el tipo de retorno del metodo " + methD.getId().getId() + " es "
+				errorList.add("Error de tipo, el tipo de retorno definido del metodo " + methD.getId().getId() + " es "
 						+ methD.getType().getType() + " y el tipo retornado es " + ret.getType());
 			}
 		}
